@@ -127,12 +127,14 @@ def from_dish_categories(dish_categories, language: str) -> ReplyKeyboardMarkup:
 
 def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     dishes_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    dishes_keyboard.add(get_string('go_back', language), get_string('catalog.cart', language))
+    dishes_keyboard.add(get_string('catalog.cart', language), get_string('go_back', language))
     if language == 'uz':
         names = [dish.name_uz for dish in dishes]
     else:
         names = [dish.name for dish in dishes]
     dishes_keyboard.add(*names)
+    #####BELLOW###########
+    dishes_keyboard.add(get_string('go_to_menu', language))
     return dishes_keyboard
 
 

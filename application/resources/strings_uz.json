@@ -23,7 +23,7 @@
     "catalog.dish_error": "Quyidagi ro'yxatdan taomni tanlang",
     "catalog.dish_action_helper": "Miqdorini tanlang yoki kiriting",
     "catalog.dish_action_error": "Miqdorini tanlang yoki kiriting",
-    "catalog.continue": "Davom etamizmi? \uD83D\uDE09",
+    "catalog.continue": "Davom etamizmi? \uD83D\uDE09\n\n{}",
     "cart.empty": "Sizning savatingiz bo'sh, buyurtma berish uchun mahsulot tanlang",
     "cart.summary": "Umumiy",
     "cart.clear": "\uD83D\uDD04 Tozalash",
@@ -33,8 +33,8 @@
     "order.delivery": "\uD83D\uDE96 Yetkazib berish",
     "order.pickup": "\uD83C\uDFC3 Olib ketish",
     "order.shipping_method_error": "Quyidagi yuk usulini tanlang\n",
-    "order.address": "Etkazib berish <b>manzilini</b> kiriting yoki <b>geolokatsiyani</b> yuboring",
-    "order.address_error": "Etkazib berish <b>manzilini</b> kiriting yoki <b>geolokatsiyani</b> yuboring.\nAgar geolokatsiya bilan bog'liq muammolar yuzaga kelsa, <b>GPS yoqilganligini tekshiring</b>",
+    "order.address": "{}\n\nQuyidagi tugmani ishlatib, <b>geolocation</b> ni yuboring",
+    "order.address_error": "<b>Geolokatsiyani</b> yuboring.\n Agar geolokatsiya bilan bog'liq muammolar mavjud bo'lsa, <b>GPS yoqilganligini tekshiring</b>",
     "order.payment_delivery": "Buyurtmangiz uchun <b>to’lov turini</b> tanlang (yetkazib berish xizmati narxi hisobga olinmagan)",
     "order.payment_pickup": "Buyurtmangiz uchun <b>to’lov turini</b> tanlang",
     "order.cash": "\uD83D\uDCB5 Naqd pul",
@@ -71,7 +71,7 @@
     "my_location": "\uD83D\uDDFA Mening joyim",
     "sum": "so'm",
     "usd": "$",
-    "not_enough_count": "Maxsulot soni kamroq ekan.\nKamroq olishingizni so`rayman.",
+    "not_enough_count": "Ushbu mahsulot miqdori qolmadi, endi Stokda: {}\nKamroq olishingizni so`rayman.",
     "accept_btn": "Rozilik beraman",
     "policy_text": "Foydalanuvchi shartnomasi bilan tanishib chiqqaningizni tasdiqlang! \nFoydalanuvchi shartnomasini havolani bosish orqali ko'rishingiz mumkin: https://delivera.uz/agreement"
 }

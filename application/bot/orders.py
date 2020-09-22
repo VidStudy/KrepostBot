@@ -31,6 +31,13 @@ def _total_order_sum(order_items) -> int:
     return total
 
 
+def _total_cart_sum(cart) -> int:
+    summary_dishes_sum = [cart_item.dish.price * cart_item.count
+                          for cart_item in cart]
+    total = sum(summary_dishes_sum)
+    return total
+
+
 def _to_the_shipping_method(chat_id, language):
     order_shipping_method_message = strings.get_string('order.shipping_method', language)
     order_shipping_method_keyboard = keyboards.get_keyboard('order.shipping_methods', language)
@@ -51,7 +58,10 @@ def _to_the_payment_method(chat_id, language, user_id: int):
 
 
 def _to_the_address(chat_id, language):
-    address_message = strings.get_string('order.address', language)
+    cart = userservice.get_user_cart(chat_id)
+    total = _total_cart_sum(cart)
+    cart_contains_message = strings.from_cart_items(cart, language, total)
+    address_message = strings.get_string('order.address', language).format(cart_contains_message)
     address_keyboard = keyboards.get_keyboard('order.address', language)
     bot.send_message(chat_id, address_message, parse_mode='HTML', reply_markup=address_keyboard)
     bot.register_next_step_handler_by_chat_id(chat_id, address_processor)
@@ -222,8 +232,10 @@ def address_processor(message: Message):
         if strings.get_string('go_back', language) in message.text:
             back_to_the_catalog(chat_id, language)
             return
-        orderservice.set_address_by_string(user_id, message.text)
-        _to_the_payment_method(chat_id, language, user_id)
+        error()
+        return
+        #orderservice.set_address_by_string(user_id, message.text)
+        #_to_the_payment_method(chat_id, language, user_id)
     elif message.location:
         location = message.location
         result = orderservice.set_address_by_map_location(user_id, (location.latitude, location.longitude))

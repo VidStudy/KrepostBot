@@ -37,7 +37,7 @@ def back_to_the_catalog(chat_id, language, message_text=None, parent_category=No
         return
     categories = dishservice.get_parent_categories(sort_by_number=True)
     category_keyboard = keyboards.from_dish_categories(categories, language)
-    bot.send_message(chat_id, catalog_message, reply_markup=category_keyboard)
+    bot.send_message(chat_id, catalog_message, reply_markup=category_keyboard, parse_mode='HTML')
     bot.register_next_step_handler_by_chat_id(chat_id, catalog_processor)
 
 
@@ -45,6 +45,13 @@ def dish_action_processor(message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
     language = userservice.get_user_language(user_id)
+
+    def _total_cart_sum(cart) -> int:
+        summary_dishes_sum = [cart_item.dish.price * cart_item.count
+                              for cart_item in cart]
+        total = sum(summary_dishes_sum)
+        return total
+
 
     def error():
         error_message = strings.get_string('catalog.dish_action_error', language)
@@ -61,6 +68,11 @@ def dish_action_processor(message: Message):
         dishes_keyboard = keyboards.from_dishes(dishes, language)
         bot.send_message(chat_id, dish_message, reply_markup=dishes_keyboard)
         bot.register_next_step_handler_by_chat_id(chat_id, choose_dish_processor, category=current_dish.category)
+
+   ##     
+    elif strings.get_string('go_to_menu', language) in message.text:
+        botutils.to_main_menu(chat_id, language)##MENU
+
     elif strings.get_string('catalog.cart', language) in message.text:
         cart.cart_processor(message, dish_action_processor)
     else:
@@ -72,13 +84,17 @@ def dish_action_processor(message: Message):
         dish_to_check = Dish.query.get(current_dish.id)
 
         if selected_number > dish_to_check.quantity:
-            not_enough_count = strings.get_string('not_enough_count', language)
+            not_enough_count = strings.get_string('not_enough_count', language).format(dish_to_check.quantity)
             msg = bot.send_message(chat_id, text=not_enough_count)
             bot.register_next_step_handler(msg, dish_action_processor)
 
         else:
             userservice.add_dish_to_cart(user_id, current_dish, int(message.text))
-            continue_message = strings.get_string('catalog.continue', language)
+            cart = userservice.get_user_cart(user_id)
+            total = _total_cart_sum(cart)
+            cart_contains_message = strings.from_cart_items(cart, language, total)
+            continue_message = strings.get_string('catalog.continue', language).format(cart_contains_message)
+            
             back_to_the_catalog(chat_id, language, continue_message)
 
 
@@ -98,9 +114,13 @@ def choose_dish_processor(message: Message, **kwargs):
     if strings.get_string('go_back', language) in message.text:
         if 'category' in kwargs:
             category = kwargs.get('category')
-            back_to_the_catalog(chat_id, language, parent_category=category)
+            back_to_the_catalog(chat_id, language, parent_category=None)
             return
         back_to_the_catalog(chat_id, language)
+    
+    elif strings.get_string('go_to_menu', language) in message.text:
+        botutils.to_main_menu(chat_id, language)##MENU
+    
     elif strings.get_string('catalog.cart', language) in message.text:
         cart.cart_processor(message, choose_dish_processor)
     else:
@@ -168,7 +188,12 @@ def catalog_processor(message: Message, **kwargs):
         if not parent_category:
             botutils.to_main_menu(chat_id, language)
             return
-        back_to_the_catalog(chat_id, language, parent_category=parent_category)
+        back_to_the_catalog(chat_id, language, parent_category=None)#NONE
+
+    elif strings.get_string('go_to_menu', language) in message.text:
+        botutils.to_main_menu(chat_id, language)##MENU
+
+
     elif strings.get_string('catalog.cart', language) in message.text:
         cart.cart_processor(message)
     elif strings.get_string('catalog.make_order', language) in message.text:
