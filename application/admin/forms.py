@@ -36,7 +36,6 @@ class DishForm(FlaskForm):
 
     def fill_from_object(self, dish: Dish):
         self.name_ru.data = dish.name
-        self.description_uz.data = dish.description_uz
         self.description_ru.data = dish.description
         self.category.data = dish.category_id
         self.price.data = dish.price

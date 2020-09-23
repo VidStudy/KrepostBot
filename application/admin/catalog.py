@@ -125,7 +125,7 @@ def dish(dish_id: int):
         return redirect(url_for('admin.catalog'))
     dish = dishservice.get_dish_by_id(dish_id)
     form.fill_from_object(dish)
-    return render_template('admin/dish.html', title='{} | {}'.format(dish.name, dish.name_uz),
+    return render_template('admin/dish.html', title='{}'.format(dish.name),
                            area='catalog', form=form, dish=dish)
 
 

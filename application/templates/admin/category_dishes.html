@@ -1,9 +1,9 @@
 {% extends 'layouts/admin.html' %}
-{% block header %}{{ category.name }} | {{ category.name_uz }}{% endblock %}
+{% block header %}{{ category.name }}{% endblock %}
 {% block breadcrumbs %}
 	<li><a href="{{ url_for('admin.catalog') }}">Каталог</a></li>
-    <li><a href="{{ url_for('admin.show_category', category_id=category.id) }}">{{ category.name }} | {{ category.name_uz }}</a>
-    <li class="active">{{ category.name }} | {{ category.name_uz }}</li>
+    <li><a href="{{ url_for('admin.show_category', category_id=category.id) }}">{{ category.name }}</a>
+    <li class="active">{{ category.name }}</li>
 {% endblock %}
 {% block content %}
     <div class="row add-button">
@@ -53,13 +53,13 @@
                                         <input type="number" class="number-counter" min="1" value="{{ dish.number }}" data-api-url="{{ url_for('admin.set_dish_number', dish_id=dish.id) }}">                                  
                                     </td>
                                     <td>
-                                        {{ dish.name }} | {{ dish.name_uz }}
+                                        {{ dish.name }}
                                     </td>
                                     <td>
                                         {{ dish.quantity }}
                                     </td>
                                     <td>
-                                        {{ dish.category.name }} | {{ dish.category.name_uz }}
+                                        {{ dish.category.name }}
                                     </td>
                                     <td>
                                         <a href="{{ url_for('admin.toggle_hide_dish', dish_id=dish.id) }}" class="btn btn-flat btn-info" data-toggle="tooltip" data-placement="top" title="{% if dish.is_hidden %}Показать{% else %}Скрыть{% endif %}">
