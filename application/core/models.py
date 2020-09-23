@@ -113,25 +113,25 @@ class DishCategory(db.Model, BaseNestedSets):
     def get_nested_names(self):
         name = self.name
         if self.parent:
-            name = self.parent.name + ' ' + name
+            name = self.parent.name + ' |=>| ' + name
             if self.parent.parent:
-                name = self.parent.parent.name + ' ' + name
+                name = self.parent.parent.name + ' |=>| ' + name
                 if self.parent.parent.parent:
-                    name = self.parent.parent.parent.name + ' ' + name
+                    name = self.parent.parent.parent.name + ' |=>| ' + name
                     if self.parent.parent.parent.parent:
-                        name = self.parent.parent.parent.parent.name + ' ' + name
+                        name = self.parent.parent.parent.parent.name + ' |=>| ' + name
         return name
 
     def get_nested_names_uz(self):
         name = self.name_uz
         if self.parent:
-            name = self.parent.name_uz + ' ' + name
+            name = self.parent.name_uz + ' |=>| ' + name
             if self.parent.parent:
-                name = self.parent.parent.name_uz + ' ' + name
+                name = self.parent.parent.name_uz + ' |=>| ' + name
                 if self.parent.parent.parent:
-                    name = self.parent.parent.parent.name_uz + ' ' + name
+                    name = self.parent.parent.parent.name_uz + ' |=>| ' + name
                     if self.parent.parent.parent.parent:
-                        name = self.parent.parent.parent.parent.name + ' ' + name
+                        name = self.parent.parent.parent.parent.name + ' |=>| ' + name
         return name
 
 
@@ -155,10 +155,10 @@ class Dish(db.Model):
     quantity = db.Column(db.String(100), default=0)
 
     def get_full_name(self):
-        return self.category.get_nested_names() + ' ' + self.name
+        return self.category.get_nested_names() + ' |=>| ' + self.name
 
     def get_full_name_uz(self):
-        return self.category.get_nested_names_uz() + ' ' + self.name_uz
+        return self.category.get_nested_names_uz() + ' |=>| ' + self.name_uz
 
 
 class Order(db.Model):
