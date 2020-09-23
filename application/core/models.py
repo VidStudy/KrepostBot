@@ -104,7 +104,6 @@ class DishCategory(db.Model, BaseNestedSets):
     __tablename__ = 'dish_categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    name_uz = db.Column(db.String(100))
     number = db.Column(db.Integer, default=1)
     image_id = db.Column(db.String(150))
     image_path = db.Column(db.String(150))
@@ -122,18 +121,6 @@ class DishCategory(db.Model, BaseNestedSets):
                         name = self.parent.parent.parent.parent.name + ' |=>| ' + name
         return name
 
-    def get_nested_names_uz(self):
-        name = self.name_uz
-        if self.parent:
-            name = self.parent.name_uz + ' |=>| ' + name
-            if self.parent.parent:
-                name = self.parent.parent.name_uz + ' |=>| ' + name
-                if self.parent.parent.parent:
-                    name = self.parent.parent.parent.name_uz + ' |=>| ' + name
-                    if self.parent.parent.parent.parent:
-                        name = self.parent.parent.parent.parent.name + ' |=>| ' + name
-        return name
-
 
 class Dish(db.Model):
     """
@@ -142,7 +129,6 @@ class Dish(db.Model):
     __tablename__ = 'dishes'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    name_uz = db.Column(db.String(100))
     image_id = db.Column(db.String(150))
     image_path = db.Column(db.String(150))
     description = db.Column(db.String(500))
@@ -156,9 +142,6 @@ class Dish(db.Model):
 
     def get_full_name(self):
         return self.category.get_nested_names() + ' |=>| ' + self.name
-
-    def get_full_name_uz(self):
-        return self.category.get_nested_names_uz() + ' |=>| ' + self.name_uz
 
 
 class Order(db.Model):

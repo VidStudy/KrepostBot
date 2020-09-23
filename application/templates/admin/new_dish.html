@@ -20,16 +20,9 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group {% if form.name_ru.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.name_ru(class='form-control', placeholder=form.name_ru.label.text) }}
+                                    {{ form.name_ru.label }}
+                                    {{ form.name_ru(class='form-control', placeholder=form.name_ru.label.text, maxlength="100") }}
                                     {% for error in form.name_ru.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group {% if form.name_uz.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.name_uz(class='form-control', placeholder=form.name_uz.label.text) }}
-                                    {% for error in form.name_uz.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
                                 </div>
@@ -38,30 +31,15 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group {% if form.description_ru.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.description_ru(class='form-control', placeholder=form.description_ru.label.text) }}
+                                    {{ form.description_ru.label }}
+                                    {{ form.description_ru(class='form-control', placeholder=form.description_ru.label.text, maxlength="500") }}
                                     {% for error in form.description_ru.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group {% if form.description_uz.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.description_uz(class='form-control', placeholder=form.description_uz.label.text) }}
-                                    {% for error in form.description_uz.errors %}
                                         <span class="help-block">{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group {% if form.price.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.price(class='form-control', placeholder=form.price.label.text) }}
-                                    {% for error in form.price.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group {% if form.category.errors|length > 0 %}has-error{% endif %}">
                                     {{ form.category.label }}
@@ -73,26 +51,37 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    {{ form.image.label }}
-                                    {{ form.image }}
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group {% if form.quantity.errors|length > 0 %}has-error{% endif %}">
+                                    {{ form.quantity.label }}
+                                    {{ form.quantity(class='form-control', placeholder=form.quantity.label.text) }}
+                                    {% for error in form.quantity.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
                                 </div>
                             </div>
-
-                            <div class="col-sm-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group {% if form.price.errors|length > 0 %}has-error{% endif %}">
+                                    {{ form.price.label }}
+                                    {{ form.price(class='form-control', placeholder=form.price.label.text) }}
+                                    {% for error in form.price.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
                                 <div class="checkbox">
                                     <label>
                                         {{ form.show_usd }} {{ form.show_usd.label.text }}
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="form-group {% if form.quantity.errors|length > 0 %}has-error{% endif %}">
-                                    {{ form.quantity(class='form-control', placeholder=form.quantity.label.text) }}
-                                    {% for error in form.quantity.errors %}
-                                        <span class="help-block">{{ error }}</span>
-                                    {% endfor %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    {{ form.image.label }}
+                                    {{ form.image }}
                                 </div>
                             </div>
                         </div>

@@ -51,7 +51,7 @@
                                         <input type="number" class="number-counter" min="1" value="{{ category.number }}" data-api-url="{{ url_for('admin.set_category_number', category_id=category.id) }}">                                  
                                     </td>
                                     <td>
-                                        {{ category.name }} | {{ category.name_uz }}
+                                        {{ category.name }}
                                     </td>
                                     <td>
                                         {% if category.get_children().count() > 0 %}

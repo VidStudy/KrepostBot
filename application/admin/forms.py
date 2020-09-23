@@ -10,7 +10,6 @@ from flask_login import current_user
 
 class CategoryForm(FlaskForm):
     name_ru = StringField('Название на русском', validators=[DataRequired('Укажите название категории на русском')])
-    name_uz = StringField('Название на узбекском', validators=[DataRequired('Укажите название категории на узбексокм')])
     image = FileField('Изображение',
                       validators=[FileAllowed(['png', 'jpg'],
                                               message='Разрешены только изображения форматов .jpg, .png')])
@@ -18,16 +17,13 @@ class CategoryForm(FlaskForm):
     submit = SubmitField('Сохранить')
     def fill_from_object(self, category: DishCategory):
         self.name_ru.data = category.name
-        self.name_uz.data = category.name_uz
         if category.parent:
             self.parent.data = category.parent_id
 
 
 class DishForm(FlaskForm):
-    name_ru = StringField('Название на русском', validators=[DataRequired('Укажите название блюда на русском')])
-    name_uz = StringField('Название на узбекском', validators=[DataRequired('Укажите название блюда на узбексокм')])
+    name_ru = StringField('Название на русском', validators=[DataRequired('Укажите название товара на русском')])
     description_ru = TextAreaField('Описание товара на русском')
-    description_uz = TextAreaField('Описание товара на узбекском')
     category = SelectField('Категория', validators=[DataRequired('Укажите категорию')], coerce=int)
     price = StringField('Цена', validators=[DataRequired('Укажите цену')])
     image = FileField('Изображение',
@@ -40,7 +36,6 @@ class DishForm(FlaskForm):
 
     def fill_from_object(self, dish: Dish):
         self.name_ru.data = dish.name
-        self.name_uz.data = dish.name_uz
         self.description_uz.data = dish.description_uz
         self.description_ru.data = dish.description
         self.category.data = dish.category_id

@@ -63,7 +63,7 @@
                         </thead>
                         <tbody>
                             {% for dish in get_dish_count %}
-                                {% if dish.quantity <= 5 %}
+                                {% if dish.quantity <= 10 %}
                                     <tr>
                                         <td>
                                             <input type="text" size="3" min="0" readonly="true" value="{{ dish.quantity }}">                                  

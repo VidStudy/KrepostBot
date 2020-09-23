@@ -25,12 +25,11 @@ def get_category_by_id(category_id) -> DishCategory:
     return DishCategory.query.get_or_404(category_id)
 
 
-def update_category(category_id: int, name_ru: str, name_uz: str, parent_id=0, image=None):
+def update_category(category_id: int, name_ru: str, parent_id=0, image=None):
     if parent_id == 0:
         parent_id = None
     category = DishCategory.query.get_or_404(category_id)
     category.name = name_ru
-    category.name_uz = name_uz
     category.parent_id = parent_id
     if image and image.filename != '':
         if category.image_path:
@@ -43,10 +42,10 @@ def update_category(category_id: int, name_ru: str, name_uz: str, parent_id=0, i
     return category
 
 
-def create_category(name_ru: str, name_uz: str, parent_id=0, image=None) -> DishCategory:
+def create_category(name_ru: str, parent_id=0, image=None) -> DishCategory:
     if parent_id == 0:
         parent_id = None
-    category = DishCategory(name=name_ru, name_uz=name_uz, parent_id=parent_id)
+    category = DishCategory(name=name_ru, parent_id=parent_id)
     if image and image.filename != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image.filename)
         files.save_file(image, file_path, recreate=True)
@@ -61,15 +60,14 @@ def remove_category(category_id: int):
     db.session.commit()
 
 
-def create_dish(name, name_uz, description, description_uz, image, price, quantity, category_id, show_usd=False):
+def create_dish(name, description, image, price, quantity, category_id, show_usd=False):
     check_quantity = ''
     if quantity != check_quantity:
         check_quantity = quantity
     elif quantity == check_quantity:
         check_quantity = 0
 
-    dish = Dish(name=name, name_uz=name_uz,
-                description=description, description_uz=description_uz,
+    dish = Dish(name=name, description=description,
                 price=price, quantity=check_quantity, category_id=category_id, show_usd=show_usd)
     if type(image) is str and image != '':
         file_path = os.path.join(Config.UPLOAD_DIRECTORY, image)
@@ -83,12 +81,10 @@ def create_dish(name, name_uz, description, description_uz, image, price, quanti
     return dish
 
 
-def update_dish(dish_id, name, name_uz, description, description_uz, image, price, category_id, delete_image, show_usd, quantity):
+def update_dish(dish_id, name, description, image, price, category_id, delete_image, show_usd, quantity):
     dish = get_dish_by_id(dish_id)
     dish.name = name
-    dish.name_uz = name_uz
     dish.description = description
-    dish.description_uz = description_uz
     dish.price = price
     dish.show_usd = show_usd
     dish.category_id = category_id
