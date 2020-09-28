@@ -132,13 +132,12 @@ class Dish(db.Model):
     image_id = db.Column(db.String(150))
     image_path = db.Column(db.String(150))
     description = db.Column(db.String(500))
-    description_uz = db.Column(db.String(500))
     show_usd = db.Column(db.Boolean, default=False)
     is_hidden = db.Column(db.Boolean, default=False)
     price = db.Column(db.Float)
     number = db.Column(db.Integer, default=1)
     category_id = db.Column(db.Integer, db.ForeignKey('dish_categories.id'))
-    quantity = db.Column(db.String(100), default=0)
+    quantity = db.Column(db.Integer, default=0)
 
     def get_full_name(self):
         return self.category.get_nested_names() + ' |=>| ' + self.name
