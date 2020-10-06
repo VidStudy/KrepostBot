@@ -61,13 +61,13 @@ def _create_product(product_name, parent_category,
         product_price = 0.0
 
     category = _create_category(category4, category3, category2, category1, parent_category)
-    _get_or_create_dish(product_name, product_description, str(image), product_price, quantity, category.id)
+    _get_or_create_dish(product_name, product_description, str(image), product_price, quantity, category)
 
 
 def _get_or_create_dish(product_name, product_description, image, product_price, quantity, category):
     if not product_name:
         return None
-    product = dishservice.get_dish_by_name(product_name, 'ru')
+    product = dishservice.get_dish_by_name(product_name, 'ru', category)
     if not product:
-        dishservice.create_dish(product_name, product_description, str(image), product_price, quantity, category)
+        dishservice.create_dish(product_name, product_description, str(image), product_price, quantity, category.id)
     return product
