@@ -22,6 +22,8 @@ def get_parent_categories(sort_by_number: bool = False) -> List[DishCategory]:
 
 
 def get_category_by_id(category_id) -> DishCategory:
+    if not category_id:
+        return None
     return DishCategory.query.get_or_404(category_id)
 
 
