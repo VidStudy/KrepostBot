@@ -4,7 +4,7 @@ from application.resources import strings, keyboards
 from application.utils import bot as botutils
 from telebot.types import Message
 from application.core import exceptions
-from application.core.models import Dish
+from application.core.models import Dish, DishCategory
 from . import userservice
 
 
@@ -28,7 +28,7 @@ def back_to_the_catalog(chat_id, language, message_text=None, parent_category_id
         catalog_message = message_text
     if parent_category:
         catalog_message = strings.from_category_name(parent_category, language)
-        categories = parent_category.get_siblings(include_self=True).all()
+        categories = parent_category.get_siblings(include_self=True).order_by(DishCategory.name.asc()).all()
         category_keyboard = keyboards.from_dish_categories(categories, language)
         bot.send_message(chat_id, catalog_message, reply_markup=category_keyboard)
         if parent_category.parent:
