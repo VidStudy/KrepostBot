@@ -207,7 +207,7 @@ def catalog_processor(message: Message, **kwargs):
             error()
             return
         if category.get_children().count() > 0:
-            categories = category.get_children().all()
+            categories = category.get_children().order_by(DishCategory.name.asc()).all()
             catalog_message = strings.from_category_name(category, language)
             category_keyboard = keyboards.from_dish_categories(categories, language)
             send_category(category, catalog_message, category_keyboard)
