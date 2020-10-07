@@ -126,7 +126,7 @@ def choose_dish_processor(message: Message, **kwargs):
         cart.cart_processor(message, choose_dish_processor)
     else:
         dish_name = message.text
-        dish = dishservice.get_dish_by_name(dish_name, language, dishservice.get_category_by_id(kwargs.get('category')))
+        dish = dishservice.get_dish_by_name(dish_name, language, dishservice.get_category_by_id(kwargs.get('category_id')))
         if not dish:
             error()
             return
