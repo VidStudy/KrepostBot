@@ -115,7 +115,7 @@ def get_delivery_price_by_distance(distance):
     delivery_price_km = settings.get_limit_delivery_km()
     if dis <= 3.0:
         delivery_cost = delivery_price[0]
-        return rount(delivery_cost, 1)
+        return round(delivery_cost, 1)
 
     elif dis > 3.0 and dis <= delivery_price_km:
         delivery_cost = (dis - 3) * delivery_price[1] + delivery_price[0]
