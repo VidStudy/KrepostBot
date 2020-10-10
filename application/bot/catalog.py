@@ -121,7 +121,7 @@ def choose_dish_processor(message: Message, **kwargs):
         botutils.to_main_menu(chat_id, language)##MENU
     
     elif strings.get_string('catalog.cart', language) in message.text:
-        cart.cart_processor(message, choose_dish_processor)
+        user_cart.cart_processor(message, choose_dish_processor)
     else:
         dish_name = message.text
         dish = dishservice.get_dish_by_name(dish_name, language, dishservice.get_category_by_id(kwargs.get('category_id')))
@@ -194,7 +194,7 @@ def catalog_processor(message: Message, **kwargs):
 
 
     elif strings.get_string('catalog.cart', language) in message.text:
-        cart.cart_processor(message)
+        user_cart.cart_processor(message)
     elif strings.get_string('catalog.make_order', language) in message.text:
         orders.order_processor(message)
     else:
