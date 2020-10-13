@@ -69,13 +69,11 @@ def dish_action_processor(message: Message):
         dishes_keyboard = keyboards.from_dishes(dishes, language)
         bot.send_message(chat_id, dish_message, reply_markup=dishes_keyboard)
         bot.register_next_step_handler_by_chat_id(chat_id, choose_dish_processor, category_id=current_dish.category.id)
-
-   ##     
     elif strings.get_string('go_to_menu', language) in message.text:
         botutils.to_main_menu(chat_id, language)##MENU
 
     elif strings.get_string('catalog.cart', language) in message.text:
-        cart.cart_processor(message, dish_action_processor)
+        user_cart.cart_processor(message, dish_action_processor)
     else:
         if not message.text.isdigit():
             error()
@@ -123,7 +121,7 @@ def choose_dish_processor(message: Message, **kwargs):
         botutils.to_main_menu(chat_id, language)##MENU
     
     elif strings.get_string('catalog.cart', language) in message.text:
-        cart.cart_processor(message, choose_dish_processor)
+        user_cart.cart_processor(message, choose_dish_processor)
     else:
         dish_name = message.text
         dish = dishservice.get_dish_by_name(dish_name, language, dishservice.get_category_by_id(kwargs.get('category_id')))
@@ -196,7 +194,7 @@ def catalog_processor(message: Message, **kwargs):
 
 
     elif strings.get_string('catalog.cart', language) in message.text:
-        cart.cart_processor(message)
+        user_cart.cart_processor(message)
     elif strings.get_string('catalog.make_order', language) in message.text:
         orders.order_processor(message)
     else:
@@ -246,4 +244,5 @@ def catalog(message: Message):
     bot.register_next_step_handler_by_chat_id(chat_id, catalog_processor)
 
 
-from . import cart, orders
+from . import orders
+from . import cart as user_cart
