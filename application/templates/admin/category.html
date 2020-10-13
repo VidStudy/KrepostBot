@@ -10,12 +10,12 @@
 {% block content %}
     <div class="row add-button">
         <div class="col-xs-4">
-            <a href="{{ url_for('admin.create_category') }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить категорию</a>
+            <a href="{{ url_for('admin.create_category', category_id=category.id) }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить категорию</a>
         </div>
     </div>
     <div class="row add-button">
         <div class="col-xs-4">
-            <a href="{{ url_for('admin.create_dish') }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить товар</a>
+            <a href="{{ url_for('admin.create_dish', category_id=category.id) }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить товар</a>
         </div>
     </div>
     <div class="row add-button">
@@ -55,7 +55,7 @@
                                         <input type="number" class="number-counter" min="1" value="{{ child.number }}" data-api-url="{{ url_for('admin.set_category_number', category_id=child.id) }}">                                  
                                     </td>
                                     <td>
-                                        {{ child.name }}
+                                        <a href="{{ url_for('admin.show_category', category_id=child.id) }}">{{ child.name }}</a>
                                     </td>
                                     <td>
                                         {% if child.get_children().count() > 0 %}

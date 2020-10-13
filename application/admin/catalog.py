@@ -46,7 +46,10 @@ def edit_category(category_id: int):
         parent_id = form.parent.data
         dishservice.update_category(category_id, name_ru, parent_id, image)
         flash('Категория {} изменена'.format(name_ru), category='success')
-        return redirect(url_for('admin.catalog'))
+        if parent_id != 0:
+            return redirect(url_for('admin.show_category', category_id=parent_id))
+        else:
+            return redirect(url_for('admin.catalog'))
     category = dishservice.get_category_by_id(category_id)
     form.fill_from_object(category)
     return render_template('admin/edit_category.html',
@@ -55,37 +58,48 @@ def edit_category(category_id: int):
 
 
 @login_required
-@bp.route('/catalog/create', methods=['GET', 'POST'])
-def create_category():
+@bp.route('/catalog/create', methods=['GET', 'POST'], defaults={'category_id': 0})
+@bp.route("/catalog/create/<int:category_id>", methods=['GET', 'POST'])
+def create_category(category_id):
     form = CategoryForm()
     all_categories = dishservice.get_all_categories()
     form.parent.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
     form.parent.choices.insert(0, (0, 'Нет'))
+    form.parent.data = category_id
+    form.parent.choices.sort()
+
     if form.validate_on_submit():
         name_ru = form.name_ru.data
         image = form.image.data
         parent_id = form.parent.data
-        dishservice.create_category(name_ru, parent_id, image)
+        redirect_category_id = dishservice.create_category(name_ru, parent_id, image).id
         flash('Категория {} добавлена'.format(name_ru), category='success')
-        return redirect(url_for('admin.catalog'))
-    form.parent.data = 0
+        return redirect(url_for('admin.show_category', category_id=redirect_category_id))
     return render_template('admin/new_category.html', title='Добавить категорию', area='catalog', form=form)
 
 
 @login_required
 @bp.route('/catalog/<int:category_id>/remove', methods=['GET'])
 def remove_category(category_id: int):
+    cat = dishservice.get_category_by_id(category_id)
+    if cat.parent:
+        redirect_to_url = url_for('admin.show_category', category_id=cat.parent.id)
+    else:
+        redirect_to_url = url_for('admin.catalog')
     dishservice.remove_category(category_id)
     flash('Категория удалена', category='success')
-    return redirect(url_for('admin.catalog'))
+    return redirect(redirect_to_url)
 
 
 @login_required
-@bp.route('/catalog/dish/create', methods=['GET', 'POST'])
-def create_dish():
+@bp.route('/catalog/dish/create', methods=['GET', 'POST'], defaults={'category_id': -1})
+@bp.route("/catalog/dish/create/<int:category_id>", methods=['GET', 'POST'])
+def create_dish(category_id):
     form = DishForm()
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
+    form.category.data = category_id
+    form.category.choices.sort()
     if form.validate_on_submit():
         name = form.name_ru.data
         description = form.description_ru.data
@@ -100,7 +114,7 @@ def create_dish():
         flash('Блюдо {} успешно добавлено в категорию {}'.format(
             name, new_dish.category.name
         ), category='success')
-        return redirect(url_for('admin.catalog'))
+        return redirect(url_for('admin.category_dishes', category_id=category_id))
     return render_template('admin/new_dish.html', title="Добавить блюдо", area='catalog', form=form)
 
 
@@ -110,6 +124,7 @@ def dish(dish_id: int):
     form = DishForm()
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
+    form.category.choices.sort()
     if form.validate_on_submit():
         name_ru = form.name_ru.data
         description_ru = form.description_ru.data
@@ -122,7 +137,7 @@ def dish(dish_id: int):
         dishservice.update_dish(dish_id, name_ru, description_ru, image, price,
                                 category_id, delete_image, show_usd, quantity)
         flash('Блюдо {} изменено'.format(name_ru, category='success'))
-        return redirect(url_for('admin.catalog'))
+        return redirect(url_for('admin.category_dishes', category_id=category_id))
     dish = dishservice.get_dish_by_id(dish_id)
     form.fill_from_object(dish)
     return render_template('admin/dish.html', title='{}'.format(dish.name),
@@ -132,9 +147,10 @@ def dish(dish_id: int):
 @login_required
 @bp.route('/catalog/dish/<int:dish_id>/remove', methods=['GET'])
 def remove_dish(dish_id: int):
+    category_id = dishservice.get_dish_by_id(dish_id).category_id
     dishservice.remove_dish(dish_id)
     flash('Блюдо удалено', category='success')
-    return redirect(url_for('admin.catalog'))
+    return redirect(url_for('admin.category_dishes', category_id=category_id))
 
 
 @login_required
@@ -162,4 +178,4 @@ def toggle_hide_dish(dish_id: int):
     else:
         message = 'Блюдо скрыто из меню Telegram-бота!'
     flash(message, category='success')
-    return redirect(url_for('admin.catalog'))
+    return redirect(request.referrer)

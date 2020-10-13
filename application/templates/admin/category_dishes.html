@@ -8,12 +8,12 @@
 {% block content %}
     <div class="row add-button">
         <div class="col-xs-4">
-            <a href="{{ url_for('admin.create_category') }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить категорию</a>
+            <a href="{{ url_for('admin.create_category', category_id=category.id) }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить категорию</a>
         </div>
     </div>
     <div class="row add-button">
         <div class="col-xs-4">
-            <a href="{{ url_for('admin.create_dish') }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить товар</a>
+            <a href="{{ url_for('admin.create_dish', category_id=category.id) }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить товар</a>
         </div>
     </div>
     <div class="row add-button">
