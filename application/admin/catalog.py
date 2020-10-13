@@ -40,6 +40,7 @@ def edit_category(category_id: int):
     all_categories = dishservice.get_all_categories()
     form.parent.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
     form.parent.choices.insert(0, (0, 'Нет'))
+    form.parent.choices.sort(key=lambda tup: tup[1])
     if form.validate_on_submit():
         name_ru = form.name_ru.data
         image = form.image.data
@@ -66,7 +67,7 @@ def create_category(category_id):
     form.parent.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
     form.parent.choices.insert(0, (0, 'Нет'))
     form.parent.data = category_id
-    form.parent.choices.sort()
+    form.parent.choices.sort(key=lambda tup: tup[1])
 
     if form.validate_on_submit():
         name_ru = form.name_ru.data
@@ -99,7 +100,7 @@ def create_dish(category_id):
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
     form.category.data = category_id
-    form.category.choices.sort()
+    form.category.choices.sort(key=lambda tup: tup[1])
     if form.validate_on_submit():
         name = form.name_ru.data
         description = form.description_ru.data
@@ -124,7 +125,7 @@ def dish(dish_id: int):
     form = DishForm()
     all_categories = dishservice.get_all_categories()
     form.category.choices = [(c.id, '{}'.format(c.get_nested_names())) for c in all_categories]
-    form.category.choices.sort()
+    form.category.choices.sort(key=lambda tup: tup[1])
     if form.validate_on_submit():
         name_ru = form.name_ru.data
         description_ru = form.description_ru.data
