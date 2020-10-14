@@ -12,87 +12,57 @@ from werkzeug.utils import secure_filename
 from .forms import MailForm
 
 
+def do_mailing(image, text, preview):
+    file_id = None
+    if preview:
+        users = User.query.all()
+    else:
+        users = [583411442, 1294618325, 64925540]
+    if image:
+        for user in users:
+            user_id = user if preview else user.id
+            if file_id:
+                try:
+                    telegram_bot.send_photo(chat_id=user_id,
+                                            photo=file_id,
+                                            caption=text)
+                except telebot.apihelper.ApiException:
+                    continue
+            else:
+                try:
+                    file = open(image, 'rb')
+                    file_id = telegram_bot.send_photo(chat_id=user_id,
+                                                        photo=file,
+                                                        caption=text).photo[-1].file_id
+                    file.close()
+                except telebot.apihelper.ApiException:
+                    continue
+            sleep(1 / 10) # 10 message per second
+    else:
+        for user in users:
+            user_id = user if preview else user.id
+            try:
+                telegram_bot.send_message(chat_id=user_id,
+                                            text=text)
+            except telebot.apihelper.ApiException:
+                continue
+            sleep(1 / 10) # 10 message per second
+
 @bp.route('/mailing', methods=['GET', 'POST'])
 @login_required
 def mailing():
     mail_form = MailForm()
-    if mail_form.validate_on_submit():
+    if request.method == 'POST':
         file = request.files['image']
-        file_name = file.filename
+        filepath = None
         if file:
-            filename = secure_filename(file_name)
+            filename = secure_filename(file.filename)
             file.save(os.path.join(Config.MAILING_DIRECTORY, filename))
+            filepath = (Config.MAILING_DIRECTORY + filename)
         text = mail_form.mail.data
-        file_id = None
-        filepath = (Config.MAILING_DIRECTORY + file_name)
-        if mail_form.image.data:
-            if mail_form.preview.data == False:
-                users = User.query.all()
-                for user in users:
-                    user_id = user.id
-                    if file_id:
-                        try:
-                            file = open(filepath, 'rb')
-                            telegram_bot.send_photo(chat_id=user_id,
-                                                    photo=file_id,
-                                                    caption=text)
-                            file.close()
-                        except telebot.apihelper.ApiException:
-                            continue
-                    else:
-                        user_id = user.id
-                        try:
-                            file = open(filepath, 'rb')
-                            file_id = telegram_bot.send_photo(chat_id=user_id,
-                                                              photo=file,
-                                                              caption=text).photo[-1].file_id
-                            file.close()
-                        except telebot.apihelper.ApiException:
-                            continue
-            elif mail_form.preview.data == True:
-                users = [583411442, 1294618325, 64925540]
-                for user in users:
-                    user_id = user
-                    if file_id:
-                        try:
-                            file = open(filepath, 'rb')
-                            telegram_bot.send_photo(chat_id=user_id,
-                                                    photo=file_id,
-                                                    caption=text)
-                            file.close()
-                        except telebot.apihelper.ApiException:
-                            continue
-                    else:
-                        user_id = user
-                        try:
-                            file = open(filepath, 'rb')
-                            file_id = telegram_bot.send_photo(chat_id=user_id,
-                                                              photo=file,
-                                                              caption=text).photo[-1].file_id
-                            file.close()
-                        except telebot.apihelper.ApiException:
-                            continue
-            os.remove((Config.MAILING_DIRECTORY + "/" + file_name))
-        else:
-            if mail_form.preview.data == False:
-                users = User.query.all()
-                for user in users:
-                    user_id = user.id
-                    try:
-                        telegram_bot.send_message(chat_id=user_id,
-                                                  text=text)
-                    except telebot.apihelper.ApiException:
-                        continue
-
-            elif mail_form.preview.data == True:
-                users = [583411442, 1294618325, 64925540]
-                for user in users:
-                    try:
-                        telegram_bot.send_message(chat_id=user,
-                                                  text=text)
-                    except telebot.apihelper.ApiException:
-                        continue
-
+        preview = mail_form.preview.data
+        thread = Thread(target = do_mailing, args = (filepath, text, preview))
+        thread.start()
         flash('Рассылка запущена!', category='success')
         return redirect(url_for('admin.mailing'))
 
