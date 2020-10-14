@@ -1,16 +1,15 @@
-import os
-
-import telebot
-from application import telegram_bot
-from application.admin import bp
-from application.core.models import User
-from config import Config
-from flask import render_template, redirect, url_for, flash, request
-from flask_login import login_required
 from werkzeug.utils import secure_filename
-
+from config import Config
+from application.admin import bp
+from flask_login import login_required
+from flask import render_template, redirect, url_for, flash, request
 from .forms import MailForm
-
+from application import telegram_bot
+import telebot
+from application.core.models import User
+import os
+from threading import Thread
+from time import sleep
 
 def do_mailing(image, text, preview):
     file_id = None
