@@ -19,7 +19,7 @@ def do_mailing(image, text, preview):
         users = [583411442, 1294618325, 64925540]
     if image:
         for user in users:
-            user_id = user if preview else user.id
+            user_id = user.id if preview else user
             if file_id:
                 try:
                     telegram_bot.send_photo(chat_id=user_id,
@@ -39,7 +39,7 @@ def do_mailing(image, text, preview):
             sleep(1 / 10) # 10 message per second
     else:
         for user in users:
-            user_id = user if preview else user.id
+            user_id = user.id if preview else user
             try:
                 telegram_bot.send_message(chat_id=user_id,
                                             text=text)
