@@ -3,6 +3,7 @@ from application.core import userservice
 from application.resources import strings, keyboards
 from application.utils import bot as botutlis
 from telebot.types import Message
+from . import registration
 
 
 def check_language(message: Message):
@@ -41,6 +42,9 @@ def change_language_processor(message: Message):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('language.change', language)
         telegram_bot.send_message(chat_id, error_msg)
         telegram_bot.register_next_step_handler_by_chat_id(chat_id, change_language_processor)

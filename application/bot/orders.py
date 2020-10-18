@@ -5,6 +5,7 @@ from telebot.types import Message, PreCheckoutQuery
 from .catalog import back_to_the_catalog
 from application.core.models import Order
 from .notifications import notify_new_order
+from . import registration
 from config import Config
 import secrets
 import re
@@ -128,6 +129,9 @@ def shipping_method_processor(message: Message):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('order.shipping_method_error', language)
         bot.send_message(chat_id, error_msg)
         bot.register_next_step_handler_by_chat_id(chat_id, shipping_method_processor)
@@ -156,6 +160,9 @@ def payment_method_processor(message: Message):
     current_order = orderservice.get_current_order_by_user(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('order.payment_error', language)
         bot.send_message(chat_id, error_msg)
         bot.register_next_step_handler_by_chat_id(chat_id, payment_method_processor)
@@ -192,6 +199,9 @@ def phone_number_processor(message):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('order.phone_number', language)
         bot.send_message(chat_id, error_msg, parse_mode='HTML')
         bot.register_next_step_handler_by_chat_id(chat_id, phone_number_processor)
@@ -221,6 +231,9 @@ def address_processor(message: Message):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('order.address_error')
         bot.send_message(chat_id, error_msg, parse_mode='HTML')
         bot.register_next_step_handler_by_chat_id(chat_id, address_processor)
@@ -253,6 +266,9 @@ def confirmation_processor(message: Message, **kwargs):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('order.confirmation_error', language)
         bot.send_message(chat_id, error_msg)
         bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor)

@@ -53,8 +53,10 @@ def dish_action_processor(message: Message):
         total = sum(summary_dishes_sum)
         return total
 
-
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_message = strings.get_string('catalog.dish_action_error', language)
         bot.send_message(chat_id, error_message)
         bot.register_next_step_handler_by_chat_id(chat_id, dish_action_processor)
@@ -103,6 +105,9 @@ def choose_dish_processor(message: Message, **kwargs):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_message = strings.get_string('catalog.dish_error', language)
         bot.send_message(chat_id, error_message)
         bot.register_next_step_handler_by_chat_id(chat_id, choose_dish_processor)
@@ -175,6 +180,9 @@ def catalog_processor(message: Message, **kwargs):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_message = strings.get_string('catalog.error', language)
         bot.send_message(chat_id, error_message)
         bot.register_next_step_handler_by_chat_id(chat_id, catalog_processor)
@@ -187,12 +195,9 @@ def catalog_processor(message: Message, **kwargs):
         if not parent_category_id:
             botutils.to_main_menu(chat_id, language)
             return
-        back_to_the_catalog(chat_id, language, parent_category_id=parent_category_id)#NONE
-
+        back_to_the_catalog(chat_id, language, parent_category_id=parent_category_id)
     elif strings.get_string('go_to_menu', language) in message.text:
-        botutils.to_main_menu(chat_id, language)##MENU
-
-
+        botutils.to_main_menu(chat_id, language)
     elif strings.get_string('catalog.cart', language) in message.text:
         user_cart.cart_processor(message)
     elif strings.get_string('catalog.make_order', language) in message.text:
@@ -227,7 +232,6 @@ def catalog_processor(message: Message, **kwargs):
 
 @bot.message_handler(commands=['order'], func=botutils.check_auth)
 @bot.message_handler(content_types=['text'], func=lambda m: botutils.check_auth(m) and check_catalog(m))
-       
 def catalog(message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id

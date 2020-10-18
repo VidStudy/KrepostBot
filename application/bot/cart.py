@@ -4,6 +4,7 @@ from application.resources import strings, keyboards
 from telebot.types import Message
 from .catalog import back_to_the_catalog, catalog_processor
 from .orders import order_processor
+from . import registration
 
 
 def _total_cart_sum(cart) -> int:
@@ -19,6 +20,9 @@ def cart_action_processor(message: Message):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('cart.error', language)
         bot.send_message(chat_id, error_msg)
         bot.register_next_step_handler_by_chat_id(chat_id, cart_action_processor)

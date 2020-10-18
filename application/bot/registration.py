@@ -11,6 +11,7 @@ import re
 def process_accept_policy(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
+
     def not_allowed():
         not_allowed_message = strings.get_string('registration.not_allowed')
         remove_keyboard = keyboards.get_keyboard('remove')
@@ -53,7 +54,11 @@ https://delivera.uz/agreement
 
 def welcome(message):
     chat_id = message.chat.id
+
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         accept_policy = types.ReplyKeyboardMarkup(resize_keyboard = True)
         item1 = types.KeyboardButton('🤝 Я согласен(сна) / Rozilik beraman')
         accept_policy.add(item1)
@@ -72,14 +77,14 @@ def welcome(message):
         return
 
 
-
-
 def process_user_language(message: Message, **kwargs):
     chat_id = message.chat.id
-    user_id = message.from_user.id
     accept_policy = kwargs.get('accept_policy')
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('welcome.say_me_language')
         telegram_bot.send_message(chat_id, error_msg)
         telegram_bot.register_next_step_handler_by_chat_id(chat_id, process_user_language)
@@ -115,6 +120,9 @@ def request_registration_name_handler(message: Message, **kwargs):
     accept_policy = kwargs.get('accept_policy')
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('registration.request.welcome', language)
         telegram_bot.send_message(chat_id, error_msg)
         telegram_bot.register_next_step_handler_by_chat_id(chat_id, request_registration_name_handler,
@@ -142,6 +150,9 @@ def request_registration_phone_number_handler(message: Message, **kwargs):
     accept_policy = kwargs.get('accept_policy')
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('registration.request.phone_number', language)
         telegram_bot.send_message(chat_id, error_msg, parse_mode='HTML')
         telegram_bot.register_next_step_handler_by_chat_id(chat_id, request_registration_phone_number_handler, name=name, language=language)

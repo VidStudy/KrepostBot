@@ -4,6 +4,7 @@ from application.resources import strings, keyboards
 from application.utils import bot as botutils
 from application.bot import notifications
 from telebot.types import Message
+from . import registration
 
 
 def check_comments(message: Message):
@@ -36,6 +37,9 @@ def comments_processor(message: Message):
     language = userservice.get_user_language(user_id)
 
     def error():
+        if message.text == '/start':
+            registration.welcome(message)
+            return
         error_msg = strings.get_string('comments.error', language)
         bot.send_message(chat_id, error_msg)
         bot.register_next_step_handler_by_chat_id(chat_id, comments_processor)
