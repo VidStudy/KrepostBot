@@ -20,7 +20,7 @@ def do_mailing(image, text, preview):
         users = User.query.all()
     if image:
         for user in users:
-            user_id = user.id if preview else user
+            user_id = user.id if preview is False else user
             if file_id:
                 try:
                     telegram_bot.send_photo(chat_id=user_id,
