@@ -47,6 +47,8 @@
                     </div>
                 </div>
             </div>
+            {% for dish in get_dish_count %}
+            {% if dish.quantity <= 5 %}
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Уведомления о поставках</h3>
@@ -62,28 +64,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for dish in get_dish_count %}
-                                {% if dish.quantity <= 5 %}
-                                    <tr>
-                                        <td>
-                                            <input type="text" size="3" min="0" readonly="true" value="{{ dish.quantity }}">                                  
-                                        </td>
-                                        <td>
-                                            {{dish.description}}
-                                        </td>
-                                        <td>
-                                            {{ dish.name }}
-                                        </td>
-                                        <td>
-                                            <a href="/catalog/dish/{{ dish.id }}" class="btn btn-flat bg-orange"><i class="fas fa-edit"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
+                            <tr>
+                                <td>
+                                    <input type="text" size="3" min="0" readonly="true" value="{{ dish.quantity }}">
+                                </td>
+                                <td>
+                                    {{dish.description}}
+                                </td>
+                                <td>
+                                    {{ dish.name }}
+                                </td>
+                                <td>
+                                    <a href="/catalog/dish/{{ dish.id }}" class="btn btn-flat bg-orange"><i class="fas fa-edit"></i></a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

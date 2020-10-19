@@ -11,12 +11,13 @@ import os
 from threading import Thread
 from time import sleep
 
+
 def do_mailing(image, text, preview):
     file_id = None
     if preview:
-        users = User.query.all()
+        users = [583411442, 1294618325]
     else:
-        users = [583411442, 1294618325, 64925540]
+        users = User.query.all()
     if image:
         for user in users:
             user_id = user.id if preview else user
@@ -39,7 +40,7 @@ def do_mailing(image, text, preview):
             sleep(1 / 10) # 10 message per second
     else:
         for user in users:
-            user_id = user.id if preview else user
+            user_id = user.id if preview is False else user
             try:
                 telegram_bot.send_message(chat_id=user_id,
                                             text=text)
