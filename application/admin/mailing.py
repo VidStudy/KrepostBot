@@ -32,21 +32,24 @@ def do_mailing(image, text, preview):
                 try:
                     file = open(image, 'rb')
                     file_id = telegram_bot.send_photo(chat_id=user_id,
-                                                        photo=file,
-                                                        caption=text).photo[-1].file_id
+                                                      photo=file,
+                                                      caption=text).photo[-1].file_id
                     file.close()
                 except telebot.apihelper.ApiException:
                     continue
-            sleep(1 / 10) # 10 message per second
+            # 10 message per second
+            sleep(1 / 10)
     else:
         for user in users:
             user_id = user.id if preview is False else user
             try:
                 telegram_bot.send_message(chat_id=user_id,
-                                            text=text)
+                                          text=text)
             except telebot.apihelper.ApiException:
                 continue
-            sleep(1 / 10) # 10 message per second
+            # 10 message per second
+            sleep(1 / 10)
+
 
 @bp.route('/mailing', methods=['GET', 'POST'])
 @login_required

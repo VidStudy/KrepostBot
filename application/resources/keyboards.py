@@ -1,6 +1,7 @@
-from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton
 from application.resources.strings import get_string, from_order_shipping_method, from_order_payment_method
 from application.core.models import Order
+from application.utils.bot import to_main_menu
 
 _keyboards_ru = {
     'remove': ReplyKeyboardRemove()
@@ -27,9 +28,8 @@ _go_back_ru = ReplyKeyboardMarkup(resize_keyboard=True)
 _go_back_ru.add(get_string('go_back'))
 _keyboards_ru['go_back'] = _go_back_ru
 
-_dish_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
-_dish_keyboard_ru.add(*[str(x) for x in list(range(1, 10))])
-_dish_keyboard_ru.add(get_string('catalog.cart'), get_string('go_back'))
+_dish_keyboard_ru = InlineKeyboardMarkup(row_width=3)
+_dish_keyboard_ru.add(*[InlineKeyboardButton(bytes([0x30 + x, 0xef, 0xb8, 0x8f, 0xe2, 0x83, 0xa3]).decode(), callback_data='count:' + str(x)) for x in list(range(1, 10))])
 _keyboards_ru['catalog.dish_keyboard'] = _dish_keyboard_ru
 
 _shipping_methods_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
@@ -72,10 +72,11 @@ _keyboards_uz['main_menu'] = _main_menu_uz
 _go_back_uz = ReplyKeyboardMarkup(resize_keyboard=True)
 _go_back_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['go_back'] = _go_back_uz
-_dish_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
-_dish_keyboard_uz.add(*[str(x) for x in list(range(1, 10))])
-_dish_keyboard_uz.add(get_string('catalog.cart', 'uz'), get_string('go_back', 'uz'))
-_keyboards_uz['catalog.dish_keyboard'] = _dish_keyboard_uz
+
+_dish_keyboard_ru = InlineKeyboardMarkup(row_width=3)
+_dish_keyboard_ru.add(*[InlineKeyboardButton(bytes([0x30 + x, 0xef, 0xb8, 0x8f, 0xe2, 0x83, 0xa3]).decode(), callback_data='count:' + str(x)) for x in list(range(1, 10))])
+_keyboards_ru['catalog.dish_keyboard'] = _dish_keyboard_ru
+
 _shipping_methods_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 _shipping_methods_keyboard_uz.add(from_order_shipping_method(Order.ShippingMethods.DELIVERY, 'uz'),
                                   from_order_shipping_method(Order.ShippingMethods.PICK_UP, 'uz'),
@@ -133,7 +134,6 @@ def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     else:
         names = [dish.name for dish in dishes]
     dishes_keyboard.add(*names)
-    #####BELLOW###########
     dishes_keyboard.add(get_string('go_to_menu', language))
     return dishes_keyboard
 
