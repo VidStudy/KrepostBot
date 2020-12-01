@@ -142,7 +142,7 @@ def set_address_by_map_location(user_id: int, map_location: tuple) -> bool:
     order_location = Location(latitude=latitude, longitude=longitude, address=address)
     distance = geocode.distance_between_two_points(map_location, settings.get_cafe_coordinates())
     current_order.location = order_location
-    current_order.distance = distance
+    current_order.distance = str(distance[0]) + str(distance[1])
     current_order.delivery_price = get_delivery_price_by_distance(distance)
     db.session.commit()
     return True
