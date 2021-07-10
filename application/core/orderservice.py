@@ -182,3 +182,10 @@ def reduce_dish_count(user_id):
         dish_in_cart = Dish.query.get(cart_item.dish.id)
         dish_in_cart.quantity = dish_in_cart.quantity - cart_item.count
     db.session.commit()
+
+
+def get_user_orders(user_id: int):
+    user = userservice.get_user_by_telegram_id(user_id)
+    return user.orders.filter(Order.confirmed == True).order_by(
+        Order.confirmation_date.desc()).limit(10).all()
+

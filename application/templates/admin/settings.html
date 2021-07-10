@@ -1,6 +1,6 @@
 {% extends 'layouts/admin.html' %}
 {% block header %}Настройки{% endblock %}
-{% block description %}Стоимость доставки, локация{% endblock %}
+{% block description %}Стоимость доставки, локация, время{% endblock %}
 {% block breadcrumbs %}
     <li class="active">Настройки</li>
 {% endblock %}
@@ -92,6 +92,52 @@
                                 {{ location_form.submit(class='btn btn-flat bg-orange') }}
                             </div>
                         </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-header">
+                    <div class="h3 box-title">Время</div>
+                    <p><b>Пример 8:00 - 22:00 </b></p>
+                    <b>Если если хотите, чтобы бот работал всегда, оставьте поле пустым</b>
+                </div>
+                <div class="box-body">
+                    <form action="{{ url_for('admin.set_times') }}" method="post">
+                        {{ time_form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group {% if time_form.start.errors|length > 0 %}has_error{% endif %}">
+                                {{ time_form.start.label }}
+                                {{ time_form.start(class='form-control') }}
+                                {% for error in time_form.start.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group {% if time_form.end.errors|length > 0 %}has_error{% endif %}">
+                                {{ time_form.end.label }}
+                                {{ time_form.end(class='form-control') }}
+                                {% for error in time_form.end.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-15 col-sm-12">
+                            <div class="form-group {% if time_form.notification.errors|length > 0 %}has_error{% endif %}">
+                                {{ time_form.notification.label }}
+                                {{ time_form.notification(class='form-control') }}
+                                {% for error in time_form.notification.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-5">
+                            {{ time_form.submit(class='btn btn-flat bg-orange') }}
+                        </div>
+                    </div>
                     </form>
                 </div>
             </div>

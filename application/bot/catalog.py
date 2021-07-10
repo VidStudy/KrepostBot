@@ -6,6 +6,8 @@ from telebot.types import Message
 from application.core import exceptions
 from application.core.models import Dish, DishCategory
 from . import userservice
+from datetime import datetime
+import settings
 
 
 def check_catalog(message: Message):
@@ -229,6 +231,17 @@ def catalog_processor(message: Message, **kwargs):
 
 @bot.message_handler(commands=['order'], func=botutils.check_auth)
 @bot.message_handler(content_types=['text'], func=lambda m: botutils.check_auth(m) and check_catalog(m))
+def work_hours(message: Message):
+    now = datetime.time(datetime.now())
+    get = settings.get_timelimits()
+    morning = get[0]
+    night = get[1]
+    notify = settings.get_timenotify()
+    if str(morning) <= str(now) <= str(night):
+        catalog(message)
+    else:
+        bot.send_message(message.chat.id, notify)
+
 
 def catalog(message: Message):
     chat_id = message.chat.id

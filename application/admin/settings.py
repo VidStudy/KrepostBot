@@ -1,7 +1,7 @@
 from . import bp
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
-from .forms import DeliveryPriceForm, CafeLocationForm
+from .forms import DeliveryPriceForm, CafeLocationForm, TimeSet
 import settings as app_settings
 
 
@@ -10,11 +10,14 @@ import settings as app_settings
 def settings():
     delivery_cost_form = DeliveryPriceForm()
     location_form = CafeLocationForm()
+    time_form = TimeSet()
     delivery_cost_form.fill_from_settings()
     location_form.fill_from_settings()
+    time_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
-                           location_form=location_form)
+                           location_form=location_form,
+                           time_form=time_form)
 
 
 @bp.route('/settings/time', methods=['POST'])
@@ -51,9 +54,12 @@ def set_location():
         return redirect(url_for('admin.settings'))
     delivery_cost_form = DeliveryPriceForm()
     delivery_cost_form.fill_from_settings()
+    time_form = TimeSet()
+    time_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
-                           location_form=location_form)
+                           location_form=location_form,
+                           time_form=time_form)
 
 
 @bp.route('/settings/delivery-cost', methods=['POST'])
@@ -73,7 +79,10 @@ def set_delivery_cost():
         return redirect(url_for('admin.settings'))
     location_form = CafeLocationForm()
     location_form.fill_from_settings()
+    time_form = TimeSet()
+    time_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
-                           location_form=location_form)
+                           location_form=location_form,
+                           time_form=time_form)
         

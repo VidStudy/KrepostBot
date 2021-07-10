@@ -19,7 +19,7 @@ _welcome_language.add(get_string('language.russian'), get_string('language.uzbek
 _keyboards_ru['welcome.language'] = _welcome_language
 
 _main_menu_ru = ReplyKeyboardMarkup(resize_keyboard=True)
-_main_menu_ru.add(get_string('main_menu.make_order'))
+_main_menu_ru.add(get_string('main_menu.make_order'), get_string('main_menu.my_orders'))
 _main_menu_ru.add(get_string('main_menu.send_comment'))
 _main_menu_ru.add(get_string('main_menu.language'))
 _keyboards_ru['main_menu'] = _main_menu_ru
@@ -65,7 +65,7 @@ _keyboards_ru['comments.send_comment'] = _comments_keyboard_ru
 
 # Initialization uzbek keyboards
 _main_menu_uz = ReplyKeyboardMarkup(resize_keyboard=True)
-_main_menu_uz.add(get_string('main_menu.make_order', 'uz'))
+_main_menu_uz.add(get_string('main_menu.make_order', 'uz'), get_string('main_menu.my_orders', 'uz'))
 _main_menu_uz.add(get_string('main_menu.send_comment', 'uz'))
 _main_menu_uz.add(get_string('main_menu.language', 'uz'))
 _keyboards_uz['main_menu'] = _main_menu_uz
@@ -136,6 +136,16 @@ def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     dishes_keyboard.add(*names)
     dishes_keyboard.add(get_string('go_to_menu', language))
     return dishes_keyboard
+
+
+def from_my_orders(orders, language) -> ReplyKeyboardMarkup:
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+    for order in orders:
+        button = get_string('my_orders.order', language).format(order.id,
+                        order.confirmation_date.strftime('%d.%m.%Y'))
+        keyboard.add(button)
+    keyboard.add(get_string('go_to_menu', language))
+    return keyboard
 
 
 def from_cart_items(cart_items, language) -> ReplyKeyboardMarkup:
