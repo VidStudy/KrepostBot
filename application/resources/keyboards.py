@@ -24,6 +24,11 @@ _main_menu_ru.add(get_string('main_menu.send_comment'), get_string('main_menu.ne
 _main_menu_ru.add(get_string('main_menu.language'), get_string('main_menu.contacts'))
 _keyboards_ru['main_menu'] = _main_menu_ru
 
+_my_orders_menu_ru = ReplyKeyboardMarkup(resize_keyboard=True)
+_my_orders_menu_ru.add(get_string('my_orders.repeat'))
+_my_orders_menu_ru.add(get_string('go_back'))
+_keyboards_ru['my_orders_menu'] = _my_orders_menu_ru
+
 _go_back_ru = ReplyKeyboardMarkup(resize_keyboard=True)
 _go_back_ru.add(get_string('go_back'))
 _keyboards_ru['go_back'] = _go_back_ru
@@ -66,12 +71,18 @@ _keyboards_ru['comments.send_comment'] = _comments_keyboard_ru
 # Initialization uzbek keyboards
 _main_menu_uz = ReplyKeyboardMarkup(resize_keyboard=True)
 _main_menu_uz.add(get_string('main_menu.make_order', 'uz'), get_string('main_menu.my_orders', 'uz'))
-_main_menu_uz.add(get_string('main_menu.send_comment', 'uz'))
-_main_menu_uz.add(get_string('main_menu.language', 'uz'))
+_main_menu_uz.add(get_string('main_menu.send_comment', 'uz'), get_string('main_menu.news', 'uz'))
+_main_menu_uz.add(get_string('main_menu.language', 'uz'), get_string('main_menu.contacts', 'uz'))
 _keyboards_uz['main_menu'] = _main_menu_uz
+
 _go_back_uz = ReplyKeyboardMarkup(resize_keyboard=True)
 _go_back_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['go_back'] = _go_back_uz
+
+_my_orders_menu_uz = ReplyKeyboardMarkup(resize_keyboard=True)
+_my_orders_menu_uz.add(get_string('my_orders.repeat', 'uz'))
+_my_orders_menu_uz.add(get_string('go_back', 'uz'))
+_keyboards_uz['my_orders_menu'] = _my_orders_menu_uz
 
 _dish_keyboard_ru = InlineKeyboardMarkup(row_width=3)
 _dish_keyboard_ru.add(*[InlineKeyboardButton(bytes([0x30 + x, 0xef, 0xb8, 0x8f, 0xe2, 0x83, 0xa3]).decode(), callback_data='count:' + str(x)) for x in list(range(1, 10))])
