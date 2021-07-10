@@ -55,7 +55,11 @@
                                         <input type="number" class="number-counter" min="1" value="{{ child.number }}" data-api-url="{{ url_for('admin.set_category_number', category_id=child.id) }}">                                  
                                     </td>
                                     <td>
-                                        <a href="{{ url_for('admin.show_category', category_id=child.id) }}">{{ child.name }}</a>
+                                        {% if child.get_children().count() > 0 %}
+                                            <a href="{{ url_for('admin.show_category', category_id=child.id) }}">{{ child.name }}</a>
+                                        {% else %}
+                                            <a href="{{ url_for('admin.category_dishes', category_id=child.id) }}">{{ child.name }}</a>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {% if child.get_children().count() > 0 %}
