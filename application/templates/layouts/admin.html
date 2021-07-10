@@ -59,6 +59,7 @@
                     <li class="{% if area == 'users' %}active{% endif %}"><a href="{{ url_for('admin.users') }}"><i class="fa fas fa-users"></i> <span>Клиенты</span></a></li>
                     <li class="{% if area == 'map' %}active{% endif %}"><a href="{{ url_for('admin.orders_map') }}"><i class="fa fas fa-map-marked-alt"></i> <span>Карта заказов</span></a></li>
                     <li class="{% if area == 'comments' %}active{% endif %}"><a href="{{ url_for('admin.comments') }}"><i class="fa fas fa-comments"></i><span>Отзывы</span></a></li>
+                    <li class="{% if area == 'news' %}active{% endif %}"><a href="{{ url_for('admin.news') }}"><i class="fa fas fa-newspaper"></i> <span>Новости</span></a></li>
                     <li class="{% if area == 'settings' %}active{% endif %}"><a href="{{ url_for('admin.settings') }}"><i class="fa fas fa-cogs"></i> <span>Настройки</span></a></li>
                     <li class="{% if area == 'admin' %}active{% endif %}"><a href="{{ url_for('admin.administrator') }}"><i class="fa fas fa-user-cog"></i> <span>Администратор</span></a></li>
                     <li class="{% if area == 'mailing' %}active{% endif %}"><a href="{{ url_for('admin.mailing') }}"><i class="fas fa-envelope"></i> <span>Рассылка</span></a></li>

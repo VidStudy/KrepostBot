@@ -166,3 +166,20 @@ def set_timenotify(notify):
     settings['timenotify'] = notify
     settings.close()
 
+
+def get_contacts() -> tuple:
+    settings = shelve.open(filename)
+    if 'contacts' not in settings:
+        settings['contacts'] = ['@telegram_contact', '+998999999999']
+    value = settings['contacts']
+    settings.close()
+    return value
+
+
+def set_contacts(contacts: tuple):
+    """
+    """
+    settings = shelve.open(filename)
+    settings['contacts'] = contacts
+    settings.close()
+

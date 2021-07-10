@@ -143,6 +143,16 @@ class Dish(db.Model):
         return self.category.get_nested_names() + ' |=>| ' + self.name
 
 
+class News(db.Model):
+    """
+    Model for news
+    """
+    __tablename__ = 'news'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(5000))
+    image_path = db.Column(db.String(150))
+
+
 class Order(db.Model):
     """
     Model for orders

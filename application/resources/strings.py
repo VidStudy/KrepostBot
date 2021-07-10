@@ -58,6 +58,10 @@ def from_cart_items(cart_items, language, total) -> str:
     return cart_contains
 
 
+def from_contacts(contacts: tuple, language: str) -> str:
+    return "Вы можете обратиться к нам за помощью по следующим контактам:\n\nНаписать в телеграм: {}\nНомер телефона: {}".format(contacts[0], contacts[1])
+
+
 def from_dish(dish: Dish, language: str) -> str:
     dish_content = ""
     if language == 'uz':

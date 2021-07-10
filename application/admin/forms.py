@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, TextAreaField, FileField, SelectFi
     PasswordField, FloatField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
 from flask_wtf.file import FileAllowed
-from application.core.models import Dish, DishCategory, User
+from application.core.models import Dish, DishCategory, User, News
 import settings
 from flask_login import current_user
 
@@ -154,6 +154,26 @@ class TimeSet(FlaskForm):
 
     def validate_end(self, field):
         self.validate_int_value(field)
+
+
+class ContactForm(FlaskForm):
+    telegram = StringField('Контакт телеграм', validators=[DataRequired("Укажите контакт")])
+    phone = StringField('Номер телефона', validators=[DataRequired("Укажите номер телефона")])
+    submit = SubmitField('Сохранить')
+
+    def fill_from_settings(self):
+        contacts = settings.get_contacts()
+        self.telegram.data = contacts[0]
+        self.phone.data = contacts[1]
+
+
+class NewsForm(FlaskForm):
+    content = TextAreaField('Текст новости')
+    image = FileField('Изображение', validators=[FileAllowed(['png', 'jpg'], message='Разрешены только изображения форматов .jpg, .png')])
+    submit = SubmitField('Сохранить')
+
+    def fill_from_object(self, news: News):
+        self.content.data = news.content
 
 
 class UserForm(FlaskForm):

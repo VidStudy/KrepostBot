@@ -1,0 +1,36 @@
+{% extends 'layouts/admin.html' %}
+{% block breadcrumbs %}
+    <li><a href="{{ url_for('admin.news') }}">Новости</a></li>
+    <li class="active">Новость {{ news.id }}</li>
+{% endblock %}
+{% block content %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Новость {{ news.id }} <small>Редактировать</small></h3>
+        </div>
+        <div class="box-body">
+            <form action="" method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form-group {% if form.content.errors|length > 0 %}has-error{% endif %}">
+                    {{ form.content.label }}
+                    {{ form.content(class='form-control', placeholder=form.content.label.text) }}
+                    {% for error in form.content.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group {% if form.image.errors|length > 0 %}has-error{% endif %}">
+                    {{ form.image.label }}
+                    {{ form.image }}
+                    <span class="help-block">Для изменения изображения загрузите новый файл, иначе оставьте это поле пустым</span>
+                    {% for error in form.image.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-buttons">
+                    <a href="{{ url_for('admin.news') }}" class="back-button btn btn-flat bg-orange"><i class="fas fa-long-arrow-alt-left"></i>Назад</a>
+                    {{ form.submit(class='save-button btn btn-flat bg-orange') }}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

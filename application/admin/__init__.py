@@ -6,7 +6,7 @@ from application.core.userservice import get_bot_users_yesterday_today_statistic
 from application.core.dishservice import get_dish_and_count
 bp = Blueprint('admin', __name__)
 
-from application.admin import users, orders, orders_map, catalog, administrator, settings, comments, requests, excel, mailing, developer
+from application.admin import users, orders, orders_map, catalog, administrator, settings, comments, requests, excel, mailing, developer, news
 
 
 @bp.context_processor

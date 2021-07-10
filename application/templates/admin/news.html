@@ -1,0 +1,24 @@
+{% extends 'layouts/admin.html' %}
+{% block header %}Новости{% endblock %}
+{% block breadcrumbs %}
+    <li class="active">Новости</li>
+{% endblock %}
+{% block content %}
+    <div class="row add-button">
+        <div class="col-xs-4">
+            <a href="{{ url_for('admin.create_news') }}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить новость</a>
+        </div>
+    </div>
+    <div class="row">
+        {% for new in news %}
+        <div class="panel panel-default col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <img class="panel-heading img-responsive" src="/news/image/{{ new.image_path.split('/')[-1] }}">
+            <div class="panel-body">
+                <p class="card-text">{{ new.content }}</p>
+                <a href="{{ url_for('admin.edit_news', news_id=new.id) }}" class="btn btn-flat bg-orange"><i class="fas fa-edit"></i></a>
+                <a href="{{ url_for('admin.remove_news', news_id=new.id) }}" onclick="return confirm('Вы уверены?')" class="btn btn-danger btn-flat"><i class="fas fa-trash"></i></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

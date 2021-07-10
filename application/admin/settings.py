@@ -1,7 +1,7 @@
 from . import bp
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
-from .forms import DeliveryPriceForm, CafeLocationForm, TimeSet
+from .forms import ContactForm, DeliveryPriceForm, CafeLocationForm, TimeSet
 import settings as app_settings
 
 
@@ -11,13 +11,16 @@ def settings():
     delivery_cost_form = DeliveryPriceForm()
     location_form = CafeLocationForm()
     time_form = TimeSet()
+    contact_form = ContactForm()
     delivery_cost_form.fill_from_settings()
     location_form.fill_from_settings()
     time_form.fill_from_settings()
+    contact_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
                            location_form=location_form,
-                           time_form=time_form)
+                           time_form=time_form,
+                           contact_form=contact_form)
 
 
 @bp.route('/settings/time', methods=['POST'])
@@ -34,12 +37,38 @@ def set_times():
         return redirect(url_for('admin.settings'))
     delivery_cost_form = DeliveryPriceForm()
     location_form = CafeLocationForm()
+    contact_form = ContactForm()
     delivery_cost_form.fill_from_settings()
     location_form.fill_from_settings()
+    contact_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
                            location_form=location_form,
-                           time_form=time_form)
+                           time_form=time_form,
+                           contact_form=contact_form)
+
+
+@bp.route('/settings/contacts', methods=['POST'])
+@login_required
+def set_contacts():
+    contact_form = ContactForm()
+    if contact_form.validate_on_submit():
+        telegram = contact_form.telegram.data
+        phone = contact_form.phone.data
+        app_settings.set_contacts((telegram, phone))
+        flash('Контакты заданы', category='success')
+        return redirect(url_for('admin.settings'))
+    delivery_cost_form = DeliveryPriceForm()
+    location_form = CafeLocationForm()
+    time_form = TimeSet()
+    delivery_cost_form.fill_from_settings()
+    location_form.fill_from_settings()
+    time_form.fill_from_settings()
+    return render_template('admin/settings.html', title='Настройки', area='settings',
+                           cost_form=delivery_cost_form,
+                           location_form=location_form,
+                           time_form=time_form,
+                           contact_form=contact_form)
 
 
 @bp.route('/settings/location', methods=['POST'])
@@ -56,10 +85,13 @@ def set_location():
     delivery_cost_form.fill_from_settings()
     time_form = TimeSet()
     time_form.fill_from_settings()
+    contact_form = ContactForm()
+    contact_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
                            location_form=location_form,
-                           time_form=time_form)
+                           time_form=time_form,
+                           contact_form=contact_form)
 
 
 @bp.route('/settings/delivery-cost', methods=['POST'])
@@ -81,8 +113,11 @@ def set_delivery_cost():
     location_form.fill_from_settings()
     time_form = TimeSet()
     time_form.fill_from_settings()
+    contact_form = ContactForm()
+    contact_form.fill_from_settings()
     return render_template('admin/settings.html', title='Настройки', area='settings',
                            cost_form=delivery_cost_form,
                            location_form=location_form,
-                           time_form=time_form)
+                           time_form=time_form,
+                           contact_form=contact_form)
         
