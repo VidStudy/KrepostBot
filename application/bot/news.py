@@ -58,5 +58,5 @@ def news(message: Message):
         image = open(news.image_path, 'rb')
         bot.send_photo(chat_id=chat_id, photo=image, caption=news.content, reply_markup=keyboard)
     else:
-        bot.send_message(chat_id=chat_id, message=strings.get_string('news.empty'))
+        bot.send_message(chat_id, strings.get_string('news.empty'))
 
