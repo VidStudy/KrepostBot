@@ -52,8 +52,8 @@ def news(message: Message):
     language = userservice.get_user_language(user_id)
 
     all_news = News.query.all()
-    news = all_news[0]
-    if news:
+    if len(all_news) > 0:
+        news = all_news[0]
         keyboard = get_news_keyboard(all_news, 0, language)
         image = open(news.image_path, 'rb')
         bot.send_photo(chat_id=chat_id, photo=image, caption=news.content, reply_markup=keyboard)
