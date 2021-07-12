@@ -60,7 +60,7 @@ def dish_action_processor(message: Message, **kwargs):
         user_cart.cart_processor(message, dish_action_processor)
 
     else:
-        choose_dish_processor(message, category=current_dish.category)
+        choose_dish_processor(message, category_id=current_dish.category.id)
 
     if message_id:
         bot.delete_message(chat_id, message_id)
