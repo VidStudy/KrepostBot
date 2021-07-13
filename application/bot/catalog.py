@@ -6,7 +6,7 @@ from telebot.types import Message
 from application.core import exceptions
 from application.core.models import Dish, DishCategory
 from . import userservice
-from datetime import datetime
+from datetime import datetime, timezone, timedelta, time
 import settings
 
 
@@ -232,12 +232,12 @@ def catalog_processor(message: Message, **kwargs):
 @bot.message_handler(commands=['order'], func=botutils.check_auth)
 @bot.message_handler(content_types=['text'], func=lambda m: botutils.check_auth(m) and check_catalog(m))
 def work_hours(message: Message):
-    now = datetime.time(datetime.now())
     get = settings.get_timelimits()
-    morning = get[0]
-    night = get[1]
+    now = datetime.time(datetime.now(timezone(timedelta(hours=5))))
+    morning = time(int(get[0].split(':')[0]), int(get[0].split(':')[1]))
+    night = time(int(get[1].split(':')[0]), int(get[1].split(':')[1]))
     notify = settings.get_timenotify()
-    if str(morning) <= str(now) <= str(night):
+    if morning <= now <= night:
         catalog(message)
     else:
         bot.send_message(message.chat.id, notify)
