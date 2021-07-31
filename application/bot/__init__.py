@@ -14,8 +14,6 @@ bp = Blueprint('bot', __name__)
 from application.bot import registration, catalog, cart, comments, language, notifications, news, my_orders
 
 if 'PRODUCTION' in os.environ:
-    telegram_bot.enable_save_next_step_handlers(delay=0, filename='/tmp/krepost.save')
-    telegram_bot.load_next_step_handlers(filename='/tmp/krepost.save')
     @bp.route(Config.WEBHOOK_URL_PATH, methods=['POST'])
     def receive_message():
         if request.headers.get('content-type') == 'application/json':
