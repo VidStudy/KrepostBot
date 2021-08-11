@@ -59,6 +59,8 @@ def from_cart_items(cart_items, language, total) -> str:
 
 
 def from_contacts(contacts: tuple, language: str) -> str:
+    if language == 'uz':
+        return 'Ёрдам учун куйидаги контактлар оркали мурожаат килишингиз мумкин.\n\nТелеграм: {}\nТелефон раками: {}'.format(contacts[0], contacts[1])
     return "Вы можете обратиться к нам за помощью по следующим контактам:\n\nНаписать в телеграм: {}\nНомер телефона: {}".format(contacts[0], contacts[1])
 
 

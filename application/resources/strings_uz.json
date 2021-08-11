@@ -12,6 +12,9 @@
     "main_menu.make_order": "\uD83D\uDECD Buyurtma berish",
     "main_menu.send_comment": "✍️ Fikr qoldirish",
     "main_menu.choose_option": "Menyuni tanlang",
+    "main_menu.my_orders": "🛒 Mening buyurtmalarim",
+    "main_menu.news": "Habarlar",
+    "main_menu.contacts": "Yordam",
     "language.change": "Quyidagi tilni tanlang",
     "language.success": "Til o'zgartirildi",
     "catalog.empty": "Katalog bo'sh",
@@ -73,5 +76,13 @@
     "usd": "$",
     "not_enough_count": "Ushbu mahsulot miqdori qolmadi, endi Stokda: {}\nKamroq olishingizni so`rayman.",
     "accept_btn": "Rozilik beraman",
-    "policy_text": "Foydalanuvchi shartnomasi bilan tanishib chiqqaningizni tasdiqlang! \nFoydalanuvchi shartnomasini havolani bosish orqali ko'rishingiz mumkin: https://delivera.uz/agreement"
+    "policy_text": "Foydalanuvchi shartnomasi bilan tanishib chiqqaningizni tasdiqlang! \nFoydalanuvchi shartnomasini havolani bosish orqali ko'rishingiz mumkin: https://delivera.uz/agreement",
+    "my_orders.empty": "Hech nima harid qilmadingiz",
+    "my_orders.orders": "📋 Sizning buyurtmalariz",
+    "my_orders.repeat": "🔄 Takrorlash",
+    "my_orders.order": "Buyurtma #{} от {}",
+    "my_orders.error": "Hatolik. Buyurtma topilmadi",
+    "news.empty": "Habarlar yoq",
+    "news.next": "Keyingi ➡️",
+    "news.prev": "⬅️ Oldingi"
 }
