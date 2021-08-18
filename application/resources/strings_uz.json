@@ -53,6 +53,7 @@
     "order.confirmation_error": "Buyurtmani tasdiqlang",
     "order.success": "Sizning buyurtmangiz qayta ishlashga topshiriladi, operatorning javobini kuting  boshqa narsa buyurtma berishni xohlaysizmi?\n",
     "order.canceled": "Buyurtma bekor qilindi",
+    "order.too_far": "Sizning hududingizda yetkazib berish xizmati mavjud emas. Tanlangan mahsulot savatchada saqlandi, keyinroq urunib ko'ring",
     "comments.send_comment": "Agar Siz bizning hizmatlarimiz sifatini yaxhshilashga yordam bersangiz benihoya xursand bulamiz.\nBuning uchun 5 ballik tizim asosida baholang yoki o`z fikringizni yozing",
     "comments.error": "Buning uchun 5 ballik tizim asosida baholang yoki o`z fikringizni yozing",
     "comments.thanks": "Fikr va mulohazalaringiz uchun raxmat",

@@ -216,6 +216,10 @@ def from_dish_name(dish: Dish, language):
         return dish.name
 
 
-def from_order_items_to_labeled_prices(order_items: List[OrderItem], language) -> List[LabeledPrice]:
+def from_order_items_to_labeled_prices(order, language) -> List[LabeledPrice]:
+    order_items = order.order_items.all()
     currency_value = settings.get_currency_value()
-    return [LabeledPrice(from_dish_name(oi.dish, language) + ' x ' + str(oi.count), int(oi.count * oi.dish.price * currency_value * 100)) for oi in order_items]
+    prices = [LabeledPrice(from_dish_name(oi.dish, language) + ' x ' + str(oi.count), int(oi.count * oi.dish.price * currency_value * 100)) for oi in order_items]
+    if order.delivery_price:
+        prices.append(LabeledPrice(get_string('delivery_price'), int(order.delivery_price * currency_value * 100)))
+    return prices

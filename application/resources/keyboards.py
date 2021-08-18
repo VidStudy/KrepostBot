@@ -34,7 +34,9 @@ _go_back_ru.add(get_string('go_back'))
 _keyboards_ru['go_back'] = _go_back_ru
 
 _dish_keyboard_ru = InlineKeyboardMarkup(row_width=3)
-_dish_keyboard_ru.add(*[InlineKeyboardButton(bytes([0x30 + x, 0xef, 0xb8, 0x8f, 0xe2, 0x83, 0xa3]).decode(), callback_data='count:' + str(x)) for x in list(range(1, 10))])
+_count_keys = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '1️⃣0️⃣', '1️⃣5️⃣', '2️⃣0️⃣', '2️⃣5️⃣', '3️⃣0️⃣', '3️⃣5️⃣']
+_count_keys_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35]
+_dish_keyboard_ru.add(*[InlineKeyboardButton(_count_keys[i], callback_data='count:' + str(_count_keys_values[i])) for i in list(range(len(_count_keys)))])
 _keyboards_ru['catalog.dish_keyboard'] = _dish_keyboard_ru
 
 _shipping_methods_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
@@ -84,9 +86,7 @@ _my_orders_menu_uz.add(get_string('my_orders.repeat', 'uz'))
 _my_orders_menu_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['my_orders_menu'] = _my_orders_menu_uz
 
-_dish_keyboard_ru = InlineKeyboardMarkup(row_width=3)
-_dish_keyboard_ru.add(*[InlineKeyboardButton(bytes([0x30 + x, 0xef, 0xb8, 0x8f, 0xe2, 0x83, 0xa3]).decode(), callback_data='count:' + str(x)) for x in list(range(1, 10))])
-_keyboards_ru['catalog.dish_keyboard'] = _dish_keyboard_ru
+_keyboards_uz['catalog.dish_keyboard'] = _dish_keyboard_ru
 
 _shipping_methods_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 _shipping_methods_keyboard_uz.add(from_order_shipping_method(Order.ShippingMethods.DELIVERY, 'uz'),

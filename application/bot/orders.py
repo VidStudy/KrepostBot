@@ -1,6 +1,7 @@
 from application import telegram_bot as bot
 from application.core import orderservice, userservice
 from application.resources import strings, keyboards
+from application.utils import geocode
 from telebot.types import Message, PreCheckoutQuery
 from .catalog import back_to_the_catalog
 from application.core.models import Order
@@ -8,6 +9,7 @@ from .notifications import notify_new_order
 from . import registration
 from config import Config
 import secrets
+import settings
 import re
 
 
@@ -85,7 +87,7 @@ def _to_the_confirmation(chat_id, current_order, language):
         payload = str(total)
         start_parameter = secrets.token_hex(20)
         currency = 'UZS'
-        prices = strings.from_order_items_to_labeled_prices(current_order.order_items.all(), language)
+        prices = strings.from_order_items_to_labeled_prices(current_order, language)
         confirmation_keyboard = keyboards.get_keyboard('order.payment_confirmation', language)
         bot.send_message(chat_id, summary_order_message, parse_mode='HTML', reply_markup=confirmation_keyboard)
         invoice = bot.send_invoice(chat_id, title, description, payload, Config.PAYMENT_PROVIDER_TOKEN, currency, prices,
@@ -98,7 +100,7 @@ def _to_the_confirmation(chat_id, current_order, language):
         payload = str(total)
         start_parameter = secrets.token_hex(20)
         currency = 'UZS'
-        prices = strings.from_order_items_to_labeled_prices(current_order.order_items.all(), language)
+        prices = strings.from_order_items_to_labeled_prices(current_order, language)
         confirmation_keyboard = keyboards.get_keyboard('order.payment_confirmation', language)
         bot.send_message(chat_id, summary_order_message, parse_mode='HTML', reply_markup=confirmation_keyboard)
         invoice = bot.send_invoice(chat_id, title, description, payload, Config.PAYMENT_PROVIDER_TOKEN_CLICK, currency, prices,
@@ -251,6 +253,12 @@ def address_processor(message: Message):
         #_to_the_payment_method(chat_id, language, user_id)
     elif message.location:
         location = message.location
+        distance = geocode.distance_between_two_points((location.latitude, location.longitude), settings.get_cafe_coordinates())
+        if (distance[0] > settings.get_limit_delivery_km()):
+            bot.send_message(chat_id, strings.get_string('order.too_far'))
+            back_to_the_catalog(chat_id, language)
+            return
+
         result = orderservice.set_address_by_map_location(user_id, (location.latitude, location.longitude))
         if result:
             _to_the_payment_method(chat_id, language, user_id)

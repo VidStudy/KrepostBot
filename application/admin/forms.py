@@ -85,8 +85,6 @@ class DeliveryPriceForm(FlaskForm):
                             validators=[DataRequired('Укажите стоимость за остальные километры')])
     limit_km = StringField('Лимит доставки (км)',
                               validators=[DataRequired('Укажите лимит доставки (км)')])
-    limit_price = StringField('Сверх лимит километража (сум)',
-                              validators=[DataRequired('Укажите цену за сверх лимит (сум)')])
     currency_value = StringField('Стоимость доллара, сум',
                                  validators=[DataRequired('Укажите стоимость доллара в суммах')])
     submit = SubmitField('Сохранить')
@@ -102,7 +100,6 @@ class DeliveryPriceForm(FlaskForm):
         delivery_cost = settings.get_delivery_cost()
         self.first_3_km.data = delivery_cost[0]
         self.others_km.data = delivery_cost[1]
-        self.limit_price.data = settings.get_limit_delivery_price()
         self.limit_km.data = settings.get_limit_delivery_km()
         self.currency_value.data = settings.get_currency_value()
     
@@ -110,9 +107,6 @@ class DeliveryPriceForm(FlaskForm):
         self.validate_int_value(field)
     
     def validate_others_km(self, field):
-        self.validate_int_value(field)
-    
-    def validate_limit_price(self, field):
         self.validate_int_value(field)
 
     def validate_limit_km(self, field):
