@@ -34,7 +34,7 @@ _go_back_ru.add(get_string('go_back'))
 _keyboards_ru['go_back'] = _go_back_ru
 
 _dish_keyboard_ru = InlineKeyboardMarkup(row_width=3)
-_count_keys = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '1️⃣0️⃣', '1️⃣5️⃣', '2️⃣0️⃣', '2️⃣5️⃣', '3️⃣0️⃣', '3️⃣5️⃣']
+_count_keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9️', '1️0️', '1️5️', '2️0️', '2️5️', '3️0️', '3️5️']
 _count_keys_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35]
 _dish_keyboard_ru.add(*[InlineKeyboardButton(_count_keys[i], callback_data='count:' + str(_count_keys_values[i])) for i in list(range(len(_count_keys)))])
 _keyboards_ru['catalog.dish_keyboard'] = _dish_keyboard_ru
