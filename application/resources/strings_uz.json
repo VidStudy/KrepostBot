@@ -38,7 +38,7 @@
     "order.shipping_method_error": "Quyidagi yuk usulini tanlang\n",
     "order.address": "{}\n\nQuyidagi tugmani ishlatib, <b>geolocation</b> ni yuboring",
     "order.address_error": "<b>Geolokatsiyani</b> yuboring.\n Agar geolokatsiya bilan bog'liq muammolar mavjud bo'lsa, <b>GPS yoqilganligini tekshiring</b>",
-    "order.payment_delivery": "Buyurtmangiz uchun <b>to’lov turini</b> tanlang (yetkazib berish xizmati narxi hisobga olinmagan)",
+    "order.payment_delivery": "Buyurtmangiz uchun <b>to’lov turini</b> tanlang",
     "order.payment_pickup": "Buyurtmangiz uchun <b>to’lov turini</b> tanlang",
     "order.cash": "\uD83D\uDCB5 Naqd pul",
     "order.payme": "\uD83D\uDCB3 Payme",
