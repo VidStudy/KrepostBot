@@ -2,7 +2,7 @@ from application import telegram_bot as bot, db
 from application.core import userservice
 from application.core.models import CartItem
 from application.resources import strings, keyboards
-from telebot.types import Message
+from telebot.types import CallbackQuery, Message
 from .catalog import back_to_the_catalog, catalog_processor
 from .orders import order_processor
 from . import registration
@@ -31,7 +31,7 @@ def cart_processor(message: Message, callback=None):
 
 
 @bot.callback_query_handler(func=lambda call: str(call.data).startswith('cart_sub:'))
-def cart_sub_query(call):
+def cart_sub_query(call: CallbackQuery):
     chat_id = call.message.chat.id
     user_id = call.from_user.id
     language = userservice.get_user_language(user_id)
@@ -59,7 +59,7 @@ def cart_sub_query(call):
 
 
 @bot.callback_query_handler(func=lambda call: str(call.data).startswith('cart_add:'))
-def cart_add_query(call):
+def cart_add_query(call: CallbackQuery):
     chat_id = call.message.chat.id
     user_id = call.from_user.id
     language = userservice.get_user_language(user_id)
@@ -85,7 +85,7 @@ def cart_add_query(call):
 
 
 @bot.callback_query_handler(func=lambda call: str(call.data).startswith('cart_remove:'))
-def cart_remove_query(call):
+def cart_remove_query(call: CallbackQuery):
     chat_id = call.message.chat.id
     user_id = call.from_user.id
     language = userservice.get_user_language(user_id)

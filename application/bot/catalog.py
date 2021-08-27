@@ -2,7 +2,7 @@ from application import telegram_bot as bot
 from application.core import userservice, dishservice
 from application.resources import strings, keyboards
 from application.utils import bot as botutils
-from telebot.types import Message
+from telebot.types import CallbackQuery, Message
 from application.core import exceptions
 from application.core.models import Dish, DishCategory
 from . import userservice
@@ -65,8 +65,9 @@ def dish_action_processor(message: Message, **kwargs):
     if message_id:
         bot.delete_message(chat_id, message_id)
 
+
 @bot.callback_query_handler(func=lambda call: str(call.data).startswith('count:'))
-def count_callback_query(call):
+def count_callback_query(call: CallbackQuery):
     def _total_cart_sum(cart) -> int:
         summary_dishes_sum = [cart_item.dish.price * cart_item.count
                               for cart_item in cart]
@@ -77,7 +78,7 @@ def count_callback_query(call):
     language = userservice.get_user_language(user_id)
     bot.answer_callback_query(call.id)
     bot.clear_step_handler_by_chat_id(chat_id)
-    selected_number = int(call.data[6:])
+    selected_number = int(call.data[len('count:'):])
     current_dish = userservice.get_current_user_dish(user_id)
     dish_to_check = Dish.query.get(current_dish.id)
     if selected_number > dish_to_check.quantity:
@@ -94,6 +95,7 @@ def count_callback_query(call):
         back_to_the_catalog(chat_id, language, continue_message)
         catalog_message = strings.get_string('catalog.start', language)
         bot.send_message(chat_id, catalog_message, parse_mode='HTML')
+
 
 def choose_dish_processor(message: Message, **kwargs):
     chat_id = message.chat.id

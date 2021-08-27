@@ -168,6 +168,9 @@ def from_cart(cart_items, language):
         else:
             cart_dict[cart_item] = 1
     for item in cart_dict:
+        print(item.id)
+        print(item.dish.name)
+        print(cart_dict[item])
         ret.add(InlineKeyboardButton(item.dish.name, callback_data='none'))
         ret.add(InlineKeyboardButton('➖', callback_data='cart_sub:' + str(item.id)),
             InlineKeyboardButton('✖️', callback_data='cart_remove:' + str(item.id)),
