@@ -29,6 +29,9 @@ def get_string(key, language='ru'):
 
 
 def from_cart_items(cart_items, language, total) -> str:
+    if len(cart_items) == 0:
+        return get_string('cart.empty', language)
+
     cart_contains = ''
     cart_contains += '<b>{}</b>:'.format(get_string('catalog.cart', language))
     cart_contains += '\n\n'
