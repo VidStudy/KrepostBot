@@ -17,10 +17,12 @@ if 'PRODUCTION' in os.environ:
     @bp.route(Config.WEBHOOK_URL_PATH, methods=['POST'])
     def receive_message():
         if request.headers.get('content-type') == 'application/json':
-            json_string = request.get_data().decode('utf-8')
-            update = telebot.types.Update.de_json(json_string)
-            telegram_bot.process_new_updates([update])
-            return ''
+            try:
+                json_string = request.get_data().decode('utf-8')
+                update = telebot.types.Update.de_json(json_string)
+                telegram_bot.process_new_updates([update])
+            finally:
+                return ''
         else:
             abort(400)
 

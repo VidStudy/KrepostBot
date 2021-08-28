@@ -111,7 +111,6 @@ def create_dish(category_id):
         category_id = form.category.data
         new_dish = dishservice.create_dish(name=name, description=description, image=image,
                                            price=price, category_id=category_id, quantity=quantity, show_usd=show_usd)
-        print(new_dish)
         flash('Блюдо {} успешно добавлено в категорию {}'.format(
             name, new_dish.category.name
         ), category='success')
