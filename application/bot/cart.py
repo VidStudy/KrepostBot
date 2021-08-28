@@ -21,11 +21,9 @@ def cart_processor(message: Message, callback=None):
     language = userservice.get_user_language(user_id)
 
     cart = userservice.get_user_cart(user_id)
-    cart_help_message = strings.get_string('cart.help', language)
     total = _total_cart_sum(cart)
     cart_contains_message = strings.from_cart_items(cart, language, total)
     cart_items_keyboard = keyboards.from_cart(cart, language)
-    bot.send_message(chat_id, cart_help_message, parse_mode='HTML')
     bot.send_message(chat_id, cart_contains_message, parse_mode='HTML', reply_markup=cart_items_keyboard)
     bot.register_next_step_handler_by_chat_id(chat_id, catalog_processor)
 
