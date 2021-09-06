@@ -39,6 +39,8 @@ from application.auth import bp as auth_bp
 app.register_blueprint(auth_bp, url_prefix='/auth')
 from application.admin import bp as admin_bp
 app.register_blueprint(admin_bp)
+from application.core.paymeservice import bp as payme_bp
+app.register_blueprint(payme_bp)
 from application.utils import filters
 
 if 'ADMIN_DEV' not in os.environ and 'PRODUCTION' not in os.environ:

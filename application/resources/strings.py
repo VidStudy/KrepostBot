@@ -40,18 +40,18 @@ def from_cart_items(cart_items, language, total) -> str:
     counter = 0
     for cart_item in cart_items:
         counter += 1
-        if language == 'uz':
-            dish_item = cart_str_item.format(counter=counter,
-                                             name=cart_item.dish.description_uz,
-                                             count=cart_item.count,
-                                             price=_format_number(cart_item.dish.price * currency_value),
-                                             sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
-        else:
-            dish_item = cart_str_item.format(counter=counter,
-                                             name=cart_item.dish.description,
-                                             count=cart_item.count,
-                                             price=_format_number(cart_item.dish.price * currency_value),
-                                             sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
+        #if language == 'uz':
+        #    dish_item = cart_str_item.format(counter=counter,
+        #                                     name=cart_item.dish.description_uz,
+        #                                     count=cart_item.count,
+        #                                     price=_format_number(cart_item.dish.price * currency_value),
+        #                                     sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
+        #else:
+        dish_item = cart_str_item.format(counter=counter,
+                                            name=cart_item.dish.description,
+                                            count=cart_item.count,
+                                            price=_format_number(cart_item.dish.price * currency_value),
+                                            sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
         dish_item += " {}\n\n".format(get_string('sum', language))
         cart_contains += dish_item
     cart_contains += "\n<b>{}</b> {} {}".format(get_string('cart.summary', language),
@@ -69,14 +69,14 @@ def from_contacts(contacts: tuple, language: str) -> str:
 
 def from_dish(dish: Dish, language: str) -> str:
     dish_content = ""
-    if language == 'uz':
-        if dish.description_uz:
-            dish_content += dish.description_uz
-            dish_content += '\n\n'
-    else:
-        if dish.description:
-            dish_content += dish.description
-            dish_content += '\n\n'
+    #if language == 'uz':
+    #    if dish.description_uz:
+    #        dish_content += dish.description_uz
+    #        dish_content += '\n\n'
+    #else:
+    if dish.description:
+        dish_content += dish.description
+        dish_content += '\n\n'
     price = dish.price * settings.get_currency_value()
     price_currency = 'sum'
     if dish.show_usd:
@@ -121,10 +121,10 @@ def from_order(order: Order, language: str, total: int) -> str:
     for order_item in order.order_items.all():
         counter += 1
         dish = order_item.dish
-        if language == 'uz':
-            dish_name = dish.get_full_name_uz()
-        else:
-            dish_name = dish.get_full_name()
+        #if language == 'uz':
+        #    dish_name = dish.get_full_name_uz()
+        #else:
+        dish_name = dish.get_full_name()
         order_item_str = order_item_tmpl.format(counter=counter,
                                                 name=dish_name,
                                                 count=order_item.count,
@@ -206,17 +206,17 @@ def from_comment_notification(comment: Comment):
 
 
 def from_category_name(category, language):
-    if language == 'uz':
-        return category.name_uz
-    else:
-        return category.name
+    #if language == 'uz':
+    #    return category.name_uz
+    #else:
+    return category.name
 
 
 def from_dish_name(dish: Dish, language):
-    if language == 'uz':
-        return dish.name_uz
-    else:
-        return dish.name
+    #if language == 'uz':
+    #    return dish.name_uz
+    #else:
+    return dish.name
 
 
 def from_order_items_to_labeled_prices(order, language) -> List[LabeledPrice]:

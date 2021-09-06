@@ -1,5 +1,5 @@
 from application import telegram_bot as bot
-from application.core import orderservice, userservice
+from application.core import orderservice, paymeservice, userservice
 from application.resources import strings, keyboards
 from application.utils import geocode
 from telebot.types import Message, PreCheckoutQuery
@@ -82,17 +82,9 @@ def _to_the_confirmation(chat_id, current_order, language):
     summary_order_message = strings.from_order(current_order, language, total)
     confirmation_keyboard = keyboards.get_keyboard('order.confirmation', language)
     if current_order.payment_method == Order.PaymentMethods.PAYME:
-        title = strings.get_string('order.payment.title', language).format(current_order.id)
-        description = strings.get_string('order.payment.description', language)
-        payload = str(total)
-        start_parameter = secrets.token_hex(20)
-        currency = 'UZS'
-        prices = strings.from_order_items_to_labeled_prices(current_order, language)
-        confirmation_keyboard = keyboards.get_keyboard('order.payment_confirmation', language)
+        confirmation_keyboard = keyboards.get_keyboard('order.confirmation', language)
         bot.send_message(chat_id, summary_order_message, parse_mode='HTML', reply_markup=confirmation_keyboard)
-        invoice = bot.send_invoice(chat_id, title, description, payload, Config.PAYMENT_PROVIDER_TOKEN, currency, prices,
-                         start_parameter)
-        bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total, message_id=invoice.message_id)
+        bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total, payme=True)
         return
     elif current_order.payment_method == Order.PaymentMethods.CLICK:
         title = strings.get_string('order.payment.title', language).format(current_order.id)
@@ -287,10 +279,18 @@ def confirmation_processor(message: Message, **kwargs):
     if strings.get_string('order.confirm', language) in message.text:
         total = kwargs.get('total')
         user = userservice.get_user_by_telegram_id(user_id)
-        order = orderservice.confirm_order(user_id, user.full_user_name, total)
+        if 'payme' in kwargs:
+            order = orderservice.get_current_order_by_user(user_id)
+            if order.delivery_price:
+                order.total_amount = order.delivery_price + total
+            else:
+                order.total_amount = total
+            paymeservice.create_check(order)
+        else:
+            order = orderservice.confirm_order(user_id, user.full_user_name, total)
+            notify_new_order(order, total)
         order_success_message = strings.get_string('order.success', language)
         back_to_the_catalog(chat_id, language, order_success_message)
-        notify_new_order(order, total)
     elif strings.get_string('order.cancel', language) in message.text:
         order_canceled_message = strings.get_string('order.canceled', language)
         if 'message_id' in kwargs:

@@ -52,8 +52,8 @@ _order_location_keyboard_ru.add(get_string('go_back'))
 _keyboards_ru['order.address'] = _order_location_keyboard_ru
 
 _order_payment_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-# from_order_payment_method(Order.PaymentMethods.PAYME, 'ru'),
-_order_payment_keyboard_ru.add(from_order_payment_method(Order.PaymentMethods.CLICK, 'ru'),
+_order_payment_keyboard_ru.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'ru'),
+                               from_order_payment_method(Order.PaymentMethods.CLICK, 'ru'),
                                from_order_payment_method(Order.PaymentMethods.CASH, 'ru'))
 _order_payment_keyboard_ru.add(get_string('go_back'), get_string('go_to_menu'))
 _keyboards_ru['order.payment'] = _order_payment_keyboard_ru
@@ -99,8 +99,8 @@ _order_location_keyboard_uz.add(location_button_uz)
 _order_location_keyboard_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['order.address'] = _order_location_keyboard_uz
 _order_payment_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-# from_order_payment_method(Order.PaymentMethods.PAYME, 'uz'),
-_order_payment_keyboard_uz.add(from_order_payment_method(Order.PaymentMethods.CLICK, 'uz'),
+_order_payment_keyboard_uz.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'uz'),
+                               from_order_payment_method(Order.PaymentMethods.CLICK, 'uz'),
                                from_order_payment_method(Order.PaymentMethods.CASH, 'uz'))
 _order_payment_keyboard_uz.add(get_string('go_back', 'uz'), get_string('go_to_menu', 'uz'))
 _keyboards_uz['order.payment'] = _order_payment_keyboard_uz
@@ -128,22 +128,25 @@ def get_keyboard(key, language='ru'):
 def from_dish_categories(dish_categories, language: str) -> ReplyKeyboardMarkup:
     categories_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     categories_keyboard.add(get_string('catalog.cart', language), get_string('catalog.make_order', language))
-    if language == 'uz':
-        names = [category.name_uz for category in dish_categories]
-    else:
-        names = [category.name for category in dish_categories]
+    #if language == 'uz':
+    #    names = [category.name_uz for category in dish_categories]
+    #else:
+    names = [category.name for category in dish_categories]
     categories_keyboard.add(*names)
-    categories_keyboard.add(get_string('go_back', language))
+    if len(dish_categories) > 0 and dish_categories[0].parent:
+        categories_keyboard.add(get_string('go_back', language))
+    else:
+        categories_keyboard.add(get_string('go_to_menu', language))
     return categories_keyboard
 
 
 def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     dishes_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     dishes_keyboard.add(get_string('catalog.cart', language), get_string('go_back', language))
-    if language == 'uz':
-        names = [dish.name_uz for dish in dishes]
-    else:
-        names = [dish.name for dish in dishes]
+    #if language == 'uz':
+    #    names = [dish.name_uz for dish in dishes]
+    #else:
+    names = [dish.name for dish in dishes]
     dishes_keyboard.add(*names)
     dishes_keyboard.add(get_string('go_to_menu', language))
     return dishes_keyboard

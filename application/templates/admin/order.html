@@ -40,7 +40,7 @@
                             {% for order_item in order.order_items.all() %}
                                 <tr>
                                     <td>{{ loop.index }}</td>
-                                    <td>{{ order_item.dish.name }} | {{ order_item.dish.name_uz }}</td>
+                                    <td>{{ order_item.dish.name }}</td>
                                     <td>{{ order_item.count }}</td>
                                     <td>{{ (order_item.dish.price * order_item.count)|price }} сум</td>
                                 </tr>

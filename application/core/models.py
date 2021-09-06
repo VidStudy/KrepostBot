@@ -203,6 +203,21 @@ class Order(db.Model):
         CLICK = 'click'
 
 
+class Transaction(db.Model):
+    __tablename__ = 'transactions'
+    id = db.Column(db.Integer, primary_key=True)
+    system = db.Column(db.String(16))
+    system_id = db.Column(db.String(100))
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
+    status = db.Column(db.Integer)
+    amount = db.Column(db.BigInteger)
+    reason = db.Column(db.Integer, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    performed_at = db.Column(db.DateTime, nullable=True)
+    cancelled_at = db.Column(db.DateTime, nullable=True)
+    order = db.relationship('Order')
+
+
 class Location(db.Model):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)

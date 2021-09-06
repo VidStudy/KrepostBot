@@ -138,21 +138,21 @@ def get_dish_by_id(dish_id: int):
 
 
 def get_category_by_name(name: str, language: str, parent_category: DishCategory = None) -> Optional[DishCategory]:
-    if language == 'uz':
-        if parent_category:
-            return DishCategory.query.filter(DishCategory.name_uz == name, DishCategory.parent_id == parent_category.id).first()
-        return DishCategory.query.filter(DishCategory.name_uz == name).first()
-    else:
-        if parent_category:
-            return DishCategory.query.filter(DishCategory.name == name, DishCategory.parent_id == parent_category.id).first()
-        return DishCategory.query.filter(DishCategory.name == name).first()
+    #if language == 'uz':
+    #    if parent_category:
+    #        return DishCategory.query.filter(DishCategory.name_uz == name, DishCategory.parent_id == parent_category.id).first()
+    #    return DishCategory.query.filter(DishCategory.name_uz == name).first()
+    #else:
+    if parent_category:
+        return DishCategory.query.filter(DishCategory.name == name, DishCategory.parent_id == parent_category.id).first()
+    return DishCategory.query.filter(DishCategory.name == name).first()
 
 
 def get_dishes_by_category_name(name: str, language: str, sort_by_number: bool = False, include_hidden=False) -> list:
-    if language == 'uz':
-        category = DishCategory.query.filter(DishCategory.name_uz == name).first()
-    else:
-        category = DishCategory.query.filter(DishCategory.name == name).first()
+    #if language == 'uz':
+    #    category = DishCategory.query.filter(DishCategory.name_uz == name).first()
+    #else:
+    category = DishCategory.query.filter(DishCategory.name == name).first()
     if category:
         query = category.dishes
         if not include_hidden:
@@ -174,16 +174,16 @@ def get_dishes_from_category(category: DishCategory, sort_by_number: bool = Fals
 
 
 def get_dish_by_name(name: str, language: str, category: DishCategory = None) -> Dish:
-    if language == 'uz':
-        if category:
-            dish = Dish.query.filter(Dish.name_uz.like(name + '%'), Dish.category_id == category.id).first()
-        else:
-            dish = Dish.query.filter(Dish.name_uz.like(name + '%')).first()
+    #if language == 'uz':
+    #    if category:
+    #        dish = Dish.query.filter(Dish.name_uz.like(name + '%'), Dish.category_id == category.id).first()
+    #    else:
+    #        dish = Dish.query.filter(Dish.name_uz.like(name + '%')).first()
+    #else:
+    if category:
+        dish = Dish.query.filter(Dish.name.like(name + '%'), Dish.category_id == category.id).first()
     else:
-        if category:
-            dish = Dish.query.filter(Dish.name.like(name + '%'), Dish.category_id == category.id).first()
-        else:
-            dish = Dish.query.filter(Dish.name.like(name + '%')).first()
+        dish = Dish.query.filter(Dish.name.like(name + '%')).first()
     return dish
 
 
