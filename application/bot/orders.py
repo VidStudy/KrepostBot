@@ -1,4 +1,4 @@
-from application import telegram_bot as bot
+from application import telegram_bot as bot, db
 from application.core import orderservice, paymeservice, userservice
 from application.resources import strings, keyboards
 from application.utils import geocode
@@ -285,6 +285,8 @@ def confirmation_processor(message: Message, **kwargs):
                 order.total_amount = order.delivery_price + total
             else:
                 order.total_amount = total
+            db.session.add(order)
+            db.session.commit()
             paymeservice.create_check(order)
         else:
             order = orderservice.confirm_order(user_id, user.full_user_name, total)
