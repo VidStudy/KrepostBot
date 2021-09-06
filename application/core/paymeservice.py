@@ -194,7 +194,7 @@ def cancel_transaction(input):
     if transaction.status == STATE_CANCELLED or transaction.status == STATE_CANCELLED_AFTER_COMPLETE:
         return {
             'transaction': str(transaction.id),
-            'perform_time': int(datetime.timestamp(transaction.cancelled_at) * 1000),
+            'cancel_time': int(datetime.timestamp(transaction.cancelled_at) * 1000),
             'state': transaction.status
         }
     elif transaction.status == STATE_CREATED:
@@ -208,7 +208,7 @@ def cancel_transaction(input):
         db.session.commit()
         return {
             'transaction': str(transaction.id),
-            'perform_time': int(datetime.timestamp(transaction.cancelled_at) * 1000),
+            'cancel_time': int(datetime.timestamp(transaction.cancelled_at) * 1000),
             'state': transaction.status
         }
     elif transaction.status == STATE_COMPLETED:
