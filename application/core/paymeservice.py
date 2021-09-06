@@ -197,10 +197,13 @@ def cancel_transaction(input):
             'cancel_time': int(datetime.timestamp(transaction.cancelled_at) * 1000),
             'state': transaction.status
         }
-    elif transaction.status == STATE_CREATED:
+    elif transaction.status == STATE_CREATED or transaction.status == STATE_COMPLETED:
         transaction.reason = input['params']['reason']
         transaction.cancelled_at = datetime.now()
-        transaction.status = STATE_CANCELLED
+        if transaction.status == STATE_COMPLETED:
+            transaction.status = STATE_CANCELLED_AFTER_COMPLETE
+        else:
+            transaction.status = STATE_CANCELLED
         transaction.order.confirmed = False
         transaction.order.confirmation_date = None
         db.session.add(transaction.order)
