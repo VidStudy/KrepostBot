@@ -163,7 +163,12 @@ def perform_transaction(input):
             raise PaymeException(input, PaymeException.COULD_NOT_PERFORM)
         else:
             order = transaction.order
-            orderservice.confirm_order(order.user_id, order.user_name, order.total_amount - order.delivery_price)
+            order.confirmed = True
+            order.confirmation_date = datetime.now()
+            for item in order.order_items:
+                item.dish.quantity -= item.count
+                db.session.add(item.dish)
+            db.session.add(order)
 
             transaction.performed_at = datetime.now()
             transaction.status = STATE_COMPLETED
