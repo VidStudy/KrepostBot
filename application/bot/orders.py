@@ -1,3 +1,4 @@
+from datetime import datetime
 from application import telegram_bot as bot, db
 from application.core import orderservice, paymeservice, userservice
 from application.resources import strings, keyboards
@@ -285,6 +286,7 @@ def confirmation_processor(message: Message, **kwargs):
                 order.total_amount = order.delivery_price + total
             else:
                 order.total_amount = total
+            order.created_at = datetime.now()
             db.session.add(order)
             db.session.commit()
             paymeservice.create_check(order)

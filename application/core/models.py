@@ -174,6 +174,7 @@ class Order(db.Model):
                                   backref='order', cascade='all, delete-orphan')
     location = db.relationship('Location', uselist=False, cascade='all,delete', backref='order')
     distance = db.Column(db.String(15))
+    created_at = db.Column(db.DateTime)
 
     def fill_from_user_cart(self, cart):
         """

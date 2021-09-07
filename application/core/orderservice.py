@@ -11,7 +11,7 @@ from telebot.types import Message
 
 def get_current_order_by_user(user_id: int) -> Order:
     user = userservice.get_user_by_telegram_id(user_id)
-    return user.orders.filter(Order.confirmed != True).first()
+    return user.orders.filter(Order.confirmed != True, Order.created_at == None).first()
 
 
 def get_order_yesterday_today_statistic():
@@ -163,6 +163,7 @@ def confirm_order(user_id: int, user_name, total_amount: float):
     :return: void
     """
     current_order = get_current_order_by_user(user_id)
+    current_order.created_at = datetime.utcnow()
     current_order.confirmed = True
     current_order.confirmation_date = datetime.utcnow()
     current_order.user_name = user_name
