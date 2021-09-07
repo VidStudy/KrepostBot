@@ -104,7 +104,7 @@ def choose_dish_processor(message: Message, **kwargs):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_message = strings.get_string('catalog.dish_error', language)
         bot.send_message(chat_id, error_message)
@@ -179,7 +179,7 @@ def catalog_processor(message: Message, **kwargs):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_message = strings.get_string('catalog.error', language)
         bot.send_message(chat_id, error_message)

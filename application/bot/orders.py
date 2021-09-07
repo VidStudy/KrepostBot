@@ -125,7 +125,7 @@ def shipping_method_processor(message: Message):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_msg = strings.get_string('order.shipping_method_error', language)
         bot.send_message(chat_id, error_msg)
@@ -156,7 +156,7 @@ def payment_method_processor(message: Message):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_msg = strings.get_string('order.payment_error', language)
         bot.send_message(chat_id, error_msg)
@@ -195,7 +195,7 @@ def phone_number_processor(message):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_msg = strings.get_string('order.phone_number', language)
         bot.send_message(chat_id, error_msg, parse_mode='HTML')
@@ -227,7 +227,7 @@ def address_processor(message: Message):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_msg = strings.get_string('order.address_error')
         bot.send_message(chat_id, error_msg, parse_mode='HTML')
@@ -268,7 +268,7 @@ def confirmation_processor(message: Message, **kwargs):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_msg = strings.get_string('order.confirmation_error', language)
         bot.send_message(chat_id, error_msg)
@@ -281,6 +281,7 @@ def confirmation_processor(message: Message, **kwargs):
         total = kwargs.get('total')
         user = userservice.get_user_by_telegram_id(user_id)
         order = orderservice.get_current_order_by_user(user_id)
+        print('confirmation')
         if order.payment_method == Order.PaymentMethods.PAYME:
             if order.delivery_price:
                 order.total_amount = order.delivery_price + total

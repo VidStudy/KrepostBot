@@ -43,7 +43,7 @@ def change_language_processor(message: Message):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            registration.request_age(message)
             return
         error_msg = strings.get_string('language.change', language)
         telegram_bot.send_message(chat_id, error_msg)
