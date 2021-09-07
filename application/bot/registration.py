@@ -8,48 +8,47 @@ import re
 
 
 @telegram_bot.message_handler(commands=['start'], func=lambda m: m.chat.type == 'private')
-def process_accept_policy(message):
-    user_id = message.from_user.id
+def request_age(message):
     chat_id = message.chat.id
+    user_id = message.from_user.id
 
-    def not_allowed():
-        not_allowed_message = strings.get_string('registration.not_allowed')
-        remove_keyboard = keyboards.get_keyboard('remove')
-        telegram_bot.send_message(chat_id, not_allowed_message, reply_markup=remove_keyboard)
     current_user = userservice.get_user_by_telegram_id(user_id)
     if current_user:
         botutils.to_main_menu(chat_id, current_user.language)
         return
     else:
-        accept_text = """
-        Подтвердите своё согласие с пользовательским соглашением. \nВы можете ознакомиться с пользовательским соглашением пройдя по ссылке\n
+        accept_age = types.ReplyKeyboardMarkup(resize_keyboard = True)
+        accept_age.add(types.KeyboardButton('Исполнилось'))
+        accept_age.add(types.KeyboardButton('Не исполнилось'))
+        error_msg = ('Для дальнейшего использования бота подтвердите, что вам исполнился 21 год.')
+        telegram_bot.send_message(chat_id, error_msg, reply_markup=accept_age, parse_mode='HTML')
+        telegram_bot.register_next_step_handler_by_chat_id(chat_id, process_age)
+
+
+def process_age(message):
+    chat_id = message.chat.id
+    if message.text.startswith('Исполнилось'):
+        request_accept_policy(message)
+    else:
+        telegram_bot.send_message(chat_id, 'Использование бота не предоставляется возможным', parse_mode='HTML')
+        telegram_bot.register_next_step_handler_by_chat_id(chat_id, process_age)
+        return
+
+
+def request_accept_policy(message):
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+
+    accept_text = """
+    Подтвердите своё согласие с пользовательским соглашением. \nВы можете ознакомиться с пользовательским соглашением пройдя по ссылке\n
 Foydalanuvchi shartnomasi bilan tanishib chiqqaningizni tasdiqlang! Foydalanuvchi shartnomasini havolani bosish orqali ko'rishingiz mumkin\n
 https://delivera.uz/agreement
-        """
-        accept_policy = types.ReplyKeyboardMarkup(resize_keyboard = True)
-        item1 = types.KeyboardButton('🤝 Я согласен(сна) / Rozilik beraman')
-        accept_policy.add(item1)
-        telegram_bot.send_message(chat_id, accept_text, reply_markup=accept_policy, parse_mode='HTML')
-        telegram_bot.register_next_step_handler_by_chat_id(chat_id, welcome)
-
-
-#def welcome(message, **kwargs):
-#    user_id = message.from_user.id
-#    chat_id = message.chat.id
-#
-#    def not_allowed():
-#        not_allowed_message = strings.get_string('registration.not_allowed')
-#        remove_keyboard = keyboards.get_keyboard('remove')
-#        telegram_bot.send_message(chat_id, not_allowed_message, reply_markup=remove_keyboard)
-#
-#    current_user = userservice.get_user_by_telegram_id(user_id)
-#    if current_user:
-#        botutils.to_main_menu(chat_id, current_user.language)
-#        return
-#    welcome_message = strings.get_string('welcome')
-#    language_keyboard = keyboards.get_keyboard('welcome.language')
-#    telegram_bot.send_message(chat_id, welcome_message, reply_markup=language_keyboard, parse_mode='HTML')
-#    telegram_bot.register_next_step_handler_by_chat_id(chat_id, process_user_language)
+    """
+    accept_policy = types.ReplyKeyboardMarkup(resize_keyboard = True)
+    item1 = types.KeyboardButton('🤝 Я согласен(сна) / Rozilik beraman')
+    accept_policy.add(item1)
+    telegram_bot.send_message(chat_id, accept_text, reply_markup=accept_policy, parse_mode='HTML')
+    telegram_bot.register_next_step_handler_by_chat_id(chat_id, welcome)
 
 
 def welcome(message):
@@ -57,7 +56,7 @@ def welcome(message):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            request_age(message)
             return
         accept_policy = types.ReplyKeyboardMarkup(resize_keyboard = True)
         item1 = types.KeyboardButton('🤝 Я согласен(сна) / Rozilik beraman')
@@ -83,7 +82,7 @@ def process_user_language(message: Message, **kwargs):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            request_age(message)
             return
         error_msg = strings.get_string('welcome.say_me_language')
         telegram_bot.send_message(chat_id, error_msg)
@@ -121,7 +120,7 @@ def request_registration_name_handler(message: Message, **kwargs):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            request_age(message)
             return
         error_msg = strings.get_string('registration.request.welcome', language)
         telegram_bot.send_message(chat_id, error_msg)
@@ -151,7 +150,7 @@ def request_registration_phone_number_handler(message: Message, **kwargs):
 
     def error():
         if message.text == '/start':
-            registration.welcome(message)
+            request_age(message)
             return
         error_msg = strings.get_string('registration.request.phone_number', language)
         telegram_bot.send_message(chat_id, error_msg, parse_mode='HTML')
