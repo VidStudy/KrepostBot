@@ -85,7 +85,7 @@ def _to_the_confirmation(chat_id, current_order, language):
     if current_order.payment_method == Order.PaymentMethods.PAYME:
         confirmation_keyboard = keyboards.get_keyboard('order.confirmation', language)
         bot.send_message(chat_id, summary_order_message, parse_mode='HTML', reply_markup=confirmation_keyboard)
-        bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total, payme=True)
+        bot.register_next_step_handler_by_chat_id(chat_id, confirmation_processor, total=total)
         return
     elif current_order.payment_method == Order.PaymentMethods.CLICK:
         title = strings.get_string('order.payment.title', language).format(current_order.id)
@@ -280,8 +280,8 @@ def confirmation_processor(message: Message, **kwargs):
     if strings.get_string('order.confirm', language) in message.text:
         total = kwargs.get('total')
         user = userservice.get_user_by_telegram_id(user_id)
-        if 'payme' in kwargs:
-            order = orderservice.get_current_order_by_user(user_id)
+        order = orderservice.get_current_order_by_user(user_id)
+        if order.payment_method == Order.PaymentMethods.PAYME:
             if order.delivery_price:
                 order.total_amount = order.delivery_price + total
             else:
