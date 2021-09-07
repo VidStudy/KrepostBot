@@ -47,8 +47,9 @@ def from_cart_items(cart_items, language, total) -> str:
         #                                     price=_format_number(cart_item.dish.price * currency_value),
         #                                     sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
         #else:
+        label = cart_item.dish.name + ' ' + cart_item.dish.category.name
         dish_item = cart_str_item.format(counter=counter,
-                                            name=cart_item.dish.description,
+                                            name=label,
                                             count=cart_item.count,
                                             price=_format_number(cart_item.dish.price * currency_value),
                                             sum=_format_number(cart_item.count * cart_item.dish.price * currency_value))
@@ -124,7 +125,7 @@ def from_order(order: Order, language: str, total: int) -> str:
         #if language == 'uz':
         #    dish_name = dish.get_full_name_uz()
         #else:
-        dish_name = dish.get_full_name()
+        dish_name = dish.name + ' ' + dish.category.name
         order_item_str = order_item_tmpl.format(counter=counter,
                                                 name=dish_name,
                                                 count=order_item.count,
@@ -179,8 +180,9 @@ def from_order_notification(order: Order, total_sum):
     for oi in order_items:
         counter += 1
         group_content = '\n'
+        label = oi.dish.name + ' ' + oi.dish.category.name
         group_content += order_item_tmpl.format(counter=counter,
-                                               name=oi.dish.description,
+                                               name=label,
                                                count=oi.count,
                                                price=_format_number(oi.dish.price),
                                                sum=_format_number(oi.dish.price * oi.count))
