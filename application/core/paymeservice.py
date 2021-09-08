@@ -279,11 +279,15 @@ def create_check(order):
             }
         }).encode('utf-8')
 
-        r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
-        print(r.data.decode('utf-8'))
-        resp_dict = json.loads(r.data.decode('utf-8'))
+        print(req_headers)
+        print(encoded_data)
 
-        check_id = resp_dict['result']['receipt']['_id']
+        #r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
+        #print(r.data.decode('utf-8'))
+        #resp_dict = json.loads(r.data.decode('utf-8'))
+
+        #check_id = resp_dict['result']['receipt']['_id']
+        check_id = 'check_id'
 
         phone = order.phone_number
         if phone[0] == '+':
@@ -298,8 +302,10 @@ def create_check(order):
             }
         }).encode('utf-8')
 
-        r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
-        print(r.data.decode('utf-8'))
+        print(encoded_data)
+
+        #r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
+        #print(r.data.decode('utf-8'))
     except Exception as e:
         print(e)
 

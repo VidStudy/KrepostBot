@@ -1,4 +1,5 @@
 from datetime import datetime
+from threading import Thread
 from application import telegram_bot as bot, db
 from application.core import orderservice, paymeservice, userservice
 from application.resources import strings, keyboards
@@ -289,7 +290,8 @@ def confirmation_processor(message: Message, **kwargs):
             order.created_at = datetime.now()
             db.session.add(order)
             db.session.commit()
-            paymeservice.create_check(order)
+            thread = Thread(target = paymeservice.create_check, args=(order))
+            thread.start()
         else:
             order = orderservice.confirm_order(user_id, user.full_user_name, total)
             notify_new_order(order, total)
