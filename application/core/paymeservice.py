@@ -261,7 +261,6 @@ import json
 
 def create_check(order):
     try:
-        print('create_check')
         http = urllib3.PoolManager()
         req_headers = {
             'Content-Type': 'application/json',
@@ -279,15 +278,10 @@ def create_check(order):
             }
         }).encode('utf-8')
 
-        print(req_headers)
-        print(encoded_data)
+        r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
+        resp_dict = json.loads(r.data.decode('utf-8'))
 
-        #r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
-        #print(r.data.decode('utf-8'))
-        #resp_dict = json.loads(r.data.decode('utf-8'))
-
-        #check_id = resp_dict['result']['receipt']['_id']
-        check_id = 'check_id'
+        check_id = resp_dict['result']['receipt']['_id']
 
         phone = order.phone_number
         if phone[0] == '+':
@@ -304,8 +298,7 @@ def create_check(order):
 
         print(encoded_data)
 
-        #r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
-        #print(r.data.decode('utf-8'))
+        r = http.request('POST', 'https://checkout.paycom.uz/api', headers=req_headers, body=encoded_data)
     except Exception as e:
         print(e)
 
