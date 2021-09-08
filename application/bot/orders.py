@@ -290,7 +290,7 @@ def confirmation_processor(message: Message, **kwargs):
             order.created_at = datetime.now()
             db.session.add(order)
             db.session.commit()
-            thread = Thread(target = paymeservice.create_check, args=(order))
+            thread = Thread(target=paymeservice.create_check, args=(order, ))
             thread.start()
         else:
             order = orderservice.confirm_order(user_id, user.full_user_name, total)
