@@ -146,6 +146,7 @@ def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     names = [dish.name for dish in dishes]
     dishes_keyboard.add(*names)
     dishes_keyboard.add(get_string('go_to_menu', language), get_string('go_back', language))
+    dishes_keyboard.add(get_string('catalog.make_order', language))
     return dishes_keyboard
 
 
