@@ -1,6 +1,6 @@
 import os
 from application import db
-from application.core import orderservice
+from application.bot.notifications import notify_new_order
 from application.core.models import Order, Transaction
 from datetime import datetime
 
@@ -174,6 +174,8 @@ def perform_transaction(input):
             transaction.status = STATE_COMPLETED
             db.session.add(transaction)
             db.session.commit()
+
+            notify_new_order(order, order.total_amount)
 
             return {
                 'transaction': str(transaction.id),

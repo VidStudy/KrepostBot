@@ -53,7 +53,6 @@ _keyboards_ru['order.address'] = _order_location_keyboard_ru
 
 _order_payment_keyboard_ru = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 _order_payment_keyboard_ru.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'ru'),
-                               from_order_payment_method(Order.PaymentMethods.CLICK, 'ru'),
                                from_order_payment_method(Order.PaymentMethods.CASH, 'ru'))
 _order_payment_keyboard_ru.add(get_string('go_back'), get_string('go_to_menu'))
 _keyboards_ru['order.payment'] = _order_payment_keyboard_ru
@@ -100,7 +99,6 @@ _order_location_keyboard_uz.add(get_string('go_back', 'uz'))
 _keyboards_uz['order.address'] = _order_location_keyboard_uz
 _order_payment_keyboard_uz = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 _order_payment_keyboard_uz.add(from_order_payment_method(Order.PaymentMethods.PAYME, 'uz'),
-                               from_order_payment_method(Order.PaymentMethods.CLICK, 'uz'),
                                from_order_payment_method(Order.PaymentMethods.CASH, 'uz'))
 _order_payment_keyboard_uz.add(get_string('go_back', 'uz'), get_string('go_to_menu', 'uz'))
 _keyboards_uz['order.payment'] = _order_payment_keyboard_uz
@@ -142,13 +140,12 @@ def from_dish_categories(dish_categories, language: str) -> ReplyKeyboardMarkup:
 
 def from_dishes(dishes, language: str) -> ReplyKeyboardMarkup:
     dishes_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    dishes_keyboard.add(get_string('catalog.cart', language), get_string('go_back', language))
     #if language == 'uz':
     #    names = [dish.name_uz for dish in dishes]
     #else:
     names = [dish.name for dish in dishes]
     dishes_keyboard.add(*names)
-    dishes_keyboard.add(get_string('go_to_menu', language))
+    dishes_keyboard.add(get_string('go_to_menu', language), get_string('go_back', language))
     return dishes_keyboard
 
 
@@ -199,8 +196,6 @@ def from_change_language(current_language: str) -> ReplyKeyboardMarkup:
 
 def from_user_phone_number(language, phone_number: str = None, go_back: bool = True) -> ReplyKeyboardMarkup:
     phone_number_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-    if phone_number and phone_number != '':
-        phone_number_keyboard.add(phone_number)
     phone_button = KeyboardButton(get_string('my_number', language), request_contact=True)
     phone_number_keyboard.add(phone_button)
     if go_back:
