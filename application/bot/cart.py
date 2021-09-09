@@ -15,14 +15,15 @@ def _total_cart_sum(cart) -> int:
     return total
 
 
-def cart_processor(message: Message, callback=None):
+def cart_processor(message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
     language = userservice.get_user_language(user_id)
 
     cart = userservice.get_user_cart(user_id)
     total = _total_cart_sum(cart)
-    cart_contains_message = strings.from_cart_items(cart, language, total)
+    helper = strings.get_string('cart.helper', language) if total != 0 else ''
+    cart_contains_message = '{}\n\n{}'.format(strings.from_cart_items(cart, language, total), helper)
     cart_items_keyboard = keyboards.from_cart(cart, language)
     bot.send_message(chat_id, cart_contains_message, parse_mode='HTML', reply_markup=cart_items_keyboard)
     bot.register_next_step_handler_by_chat_id(chat_id, catalog_processor)
@@ -51,7 +52,8 @@ def cart_sub_query(call: CallbackQuery):
 
     cart = userservice.get_user_cart(user_id)
     total = _total_cart_sum(cart)
-    msg = strings.from_cart_items(cart, language, total)
+    helper = strings.get_string('cart.helper', language) if total != 0 else ''
+    msg = '{}\n\n{}'.format(strings.from_cart_items(cart, language, total), helper)
     kbd = keyboards.from_cart(cart, language)
     bot.edit_message_text(msg, chat_id=chat_id, message_id=call.message.message_id, reply_markup=kbd, parse_mode='HTML')
 
@@ -77,7 +79,8 @@ def cart_add_query(call: CallbackQuery):
 
     cart = userservice.get_user_cart(user_id)
     total = _total_cart_sum(cart)
-    msg = strings.from_cart_items(cart, language, total)
+    helper = strings.get_string('cart.helper', language) if total != 0 else ''
+    msg = '{}\n\n{}'.format(strings.from_cart_items(cart, language, total), helper)
     kbd = keyboards.from_cart(cart, language)
     bot.edit_message_text(msg, chat_id=chat_id, message_id=call.message.message_id, reply_markup=kbd, parse_mode='HTML')
 
@@ -95,6 +98,23 @@ def cart_remove_query(call: CallbackQuery):
 
     cart = userservice.get_user_cart(user_id)
     total = _total_cart_sum(cart)
-    msg = strings.from_cart_items(cart, language, total)
+    helper = strings.get_string('cart.helper', language) if total != 0 else ''
+    msg = '{}\n\n{}'.format(strings.from_cart_items(cart, language, total), helper)
+    kbd = keyboards.from_cart(cart, language)
+    bot.edit_message_text(msg, chat_id=chat_id, message_id=call.message.message_id, reply_markup=kbd, parse_mode='HTML')
+
+
+@bot.callback_query_handler(func=lambda call: str(call.data).startswith('cart_clear'))
+def cart_clear_query(call: CallbackQuery):
+    chat_id = call.message.chat.id
+    user_id = call.from_user.id
+    language = userservice.get_user_language(user_id)
+
+    userservice.clear_user_cart(user_id)
+
+    cart = userservice.get_user_cart(user_id)
+    total = _total_cart_sum(cart)
+    helper = strings.get_string('cart.helper', language) if total != 0 else ''
+    msg = '{}\n\n{}'.format(strings.from_cart_items(cart, language, total), helper)
     kbd = keyboards.from_cart(cart, language)
     bot.edit_message_text(msg, chat_id=chat_id, message_id=call.message.message_id, reply_markup=kbd, parse_mode='HTML')

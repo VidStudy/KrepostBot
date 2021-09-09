@@ -132,7 +132,7 @@ def choose_dish_processor(message: Message, **kwargs):
             error()
             return
         userservice.set_current_user_dish(user_id, dish.id)
-        userservice.add_dish_to_cart(user_id, dish, 1)
+        dish_keyboard = keyboards.get_keyboard('catalog.dish_keyboard', language)
         dish_info = strings.from_dish(dish, language)
         msg_id = None
         if dish.image_id or dish.image_path:
@@ -140,16 +140,15 @@ def choose_dish_processor(message: Message, **kwargs):
                 try:
                     image = open(dish.image_path, 'rb')
                 except FileNotFoundError:
-                    bot.send_message(chat_id, dish_info, parse_mode='HTML')
+                    bot.send_message(chat_id, dish_info, reply_markup=dish_keyboard, parse_mode='HTML')
                 else:
-                    sent_message = bot.send_photo(chat_id, image, caption=dish_info, parse_mode='HTML')
+                    sent_message = bot.send_photo(chat_id, image, caption=dish_info, reply_markup=dish_keyboard, parse_mode='HTML')
                     dishservice.set_dish_image_id(dish, sent_message.photo[-1].file_id)
                     msg_id = sent_message.message_id
             elif dish.image_id:
-                msg_id = bot.send_photo(chat_id, dish.image_id, caption=dish_info, parse_mode='HTML').message_id
+                msg_id = bot.send_photo(chat_id, dish.image_id, caption=dish_info, reply_markup=dish_keyboard, parse_mode='HTML').message_id
         else:
-            msg_id = bot.send_message(chat_id, dish_info, parse_mode='HTML').message_id
-        user_cart.cart_processor(message)
+            msg_id = bot.send_message(chat_id, dish_info, reply_markup=dish_keyboard, parse_mode='HTML').message_id
         bot.register_next_step_handler_by_chat_id(chat_id, dish_action_processor, message_id=msg_id)
 
 

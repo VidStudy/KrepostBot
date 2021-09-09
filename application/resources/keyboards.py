@@ -163,10 +163,12 @@ def from_my_orders(orders, language) -> ReplyKeyboardMarkup:
 def from_cart(cart_items, language):
     ret = InlineKeyboardMarkup()
     for item in cart_items:
-        ret.add(InlineKeyboardButton(item.dish.name, callback_data='none'))
+        ret.add(InlineKeyboardButton(item.dish.category.name + ' ' + item.dish.name, callback_data='none'))
         ret.add(InlineKeyboardButton('➖', callback_data='cart_sub:' + str(item.id)),
-            InlineKeyboardButton('✖️', callback_data='cart_remove:' + str(item.id)),
+            InlineKeyboardButton('❌', callback_data='cart_remove:' + str(item.id)),
             InlineKeyboardButton('➕', callback_data='cart_add:' + str(item.id)))
+    if len(cart_items) > 0:
+        ret.add(InlineKeyboardButton(get_string('cart.clear'), callback_data='cart_clear'))
     return ret
 
 
