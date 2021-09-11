@@ -281,9 +281,9 @@ def confirmation_processor(message: Message, **kwargs):
     if strings.get_string('order.confirm', language) in message.text:
         total = kwargs.get('total')
         user = userservice.get_user_by_telegram_id(user_id)
-        userservice.clear_user_cart(user_id)
         order = orderservice.get_current_order_by_user(user_id)
         if order.payment_method == Order.PaymentMethods.PAYME:
+            userservice.clear_user_cart(user_id)
             if order.delivery_price:
                 order.total_amount = order.delivery_price + total
             else:
