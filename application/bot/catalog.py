@@ -234,12 +234,10 @@ def catalog_processor(message: Message, **kwargs):
 @bot.message_handler(commands=['order'], func=botutils.check_auth)
 @bot.message_handler(content_types=['text'], func=lambda m: botutils.check_auth(m) and check_catalog(m))
 def work_hours(message: Message):
-    get = settings.get_timelimits()
-    now = datetime.time(datetime.now(timezone(timedelta(hours=5))))
-    morning = time(int(get[0].split(':')[0]), int(get[0].split(':')[1]))
-    night = time(int(get[1].split(':')[0]), int(get[1].split(':')[1]))
+    tz = timezone(timedelta(hours=5))
+    now = datetime.time(datetime.now(tz))
     notify = settings.get_timenotify()
-    if morning <= now <= night:
+    if (time(10, 0) <= now and now <= time(18, 59)) or (time(0, 0) <= now and now <= time(1, 0)):
         catalog(message)
     else:
         bot.send_message(message.chat.id, notify)
