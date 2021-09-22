@@ -237,7 +237,7 @@ def work_hours(message: Message):
     tz = timezone(timedelta(hours=5))
     now = datetime.time(datetime.now(tz))
     notify = settings.get_timenotify()
-    if (time(10, 0) <= now and now <= time(18, 59)) or (time(0, 0) <= now and now <= time(1, 0)):
+    if (time(10, 0) <= now and now <= time(23, 59)) or (time(0, 0) <= now and now <= time(1, 0)):
         catalog(message)
     else:
         bot.send_message(message.chat.id, notify)
