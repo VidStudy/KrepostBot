@@ -15,7 +15,7 @@ from time import sleep
 def do_mailing(image, text, preview):
     file_id = None
     if preview:
-        users = [583411442, 1294618325]
+        users = [78251575, 202624021]
     else:
         users = User.query.all()
     if image:
