@@ -1,3 +1,4 @@
+import io
 from application import telegram_bot
 from application.core import userservice
 from application.resources import strings, keyboards
@@ -5,6 +6,7 @@ from application.utils import bot as botutils
 from telebot.types import Message
 from telebot import types
 import re
+import settings
 
 
 @telegram_bot.message_handler(commands=['start'], func=lambda m: m.chat.type == 'private')
@@ -40,14 +42,18 @@ def request_accept_policy(message):
     chat_id = message.chat.id
 
     accept_text = """
-    Подтвердите своё согласие с пользовательским соглашением. \nВы можете ознакомиться с пользовательским соглашением пройдя по ссылке\n
-Foydalanuvchi shartnomasi bilan tanishib chiqqaningizni tasdiqlang! Foydalanuvchi shartnomasini havolani bosish orqali ko'rishingiz mumkin\n
-https://delivera.uz/agreement
+    Подтвердите своё согласие с публичной оффертой. \n
+Publik offerta bilan tanishib chiqqaningizni tasdiqlang!\n
     """
     accept_policy = types.ReplyKeyboardMarkup(resize_keyboard = True)
     item1 = types.KeyboardButton('🤝 Я согласен(сна) / Rozilik beraman')
     accept_policy.add(item1)
-    telegram_bot.send_message(chat_id, accept_text, reply_markup=accept_policy, parse_mode='HTML')
+
+    with open(settings.get_files()['tos'], 'rb') as doc:
+        document = io.BytesIO(doc.read())
+        extension = settings.get_files()['tos'].split('.')[-1]
+        document.name = 'offerta.' + extension
+        telegram_bot.send_document(chat_id, document, caption=accept_text, reply_markup=accept_policy, parse_mode='HTML')
     telegram_bot.register_next_step_handler_by_chat_id(chat_id, welcome)
 
 

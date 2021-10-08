@@ -22,6 +22,7 @@ _main_menu_ru = ReplyKeyboardMarkup(resize_keyboard=True)
 _main_menu_ru.add(get_string('main_menu.make_order'), get_string('main_menu.my_orders'))
 _main_menu_ru.add(get_string('main_menu.send_comment'), get_string('main_menu.news'))
 _main_menu_ru.add(get_string('main_menu.language'), get_string('main_menu.contacts'))
+_main_menu_ru.add(get_string('pricelist'))
 _keyboards_ru['main_menu'] = _main_menu_ru
 
 _my_orders_menu_ru = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -74,6 +75,7 @@ _main_menu_uz = ReplyKeyboardMarkup(resize_keyboard=True)
 _main_menu_uz.add(get_string('main_menu.make_order', 'uz'), get_string('main_menu.my_orders', 'uz'))
 _main_menu_uz.add(get_string('main_menu.send_comment', 'uz'), get_string('main_menu.news', 'uz'))
 _main_menu_uz.add(get_string('main_menu.language', 'uz'), get_string('main_menu.contacts', 'uz'))
+_main_menu_uz.add(get_string('pricelist', 'uz'))
 _keyboards_uz['main_menu'] = _main_menu_uz
 
 _go_back_uz = ReplyKeyboardMarkup(resize_keyboard=True)

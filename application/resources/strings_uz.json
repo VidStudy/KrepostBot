@@ -87,5 +87,6 @@
     "my_orders.error": "Hatolik. Buyurtma topilmadi",
     "news.empty": "Habarlar yoq",
     "news.next": "Keyingi ➡️",
-    "news.prev": "⬅️ Oldingi"
+    "news.prev": "⬅️ Oldingi",
+    "pricelist": "Prays-list"
 }

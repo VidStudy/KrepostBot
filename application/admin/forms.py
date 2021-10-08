@@ -161,6 +161,12 @@ class ContactForm(FlaskForm):
         self.phone.data = contacts[1]
 
 
+class FilesForm(FlaskForm):
+    tos = FileField('Публичная офферта')
+    pricelist = FileField('Прайс-лист')
+    submit = SubmitField('Сохранить')
+
+
 class NewsForm(FlaskForm):
     content = TextAreaField('Текст новости')
     image = FileField('Изображение', validators=[FileAllowed(['png', 'jpg'], message='Разрешены только изображения форматов .jpg, .png')])

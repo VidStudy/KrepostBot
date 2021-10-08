@@ -169,6 +169,41 @@
                     </form>
                 </div>
             </div>
+            <div class="box">
+                <div class="box-header">
+                    <div class="h3 box-title">Файлы</div>
+                </div>
+                <div class="box-body">
+                    <form action="{{ url_for('admin.set_files') }}" method="post" enctype="multipart/form-data">
+                        {{ files_form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group {% if files_form.tos.errors|length > 0 %}has_error{% endif %}">
+                                {{ files_form.tos.label }}
+                                {{ files_form.tos(class='form-control') }}
+                                {% for error in files_form.tos.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group {% if files_form.pricelist.errors|length > 0 %}has_error{% endif %}">
+                                {{ files_form.pricelist.label }}
+                                {{ files_form.pricelist(class='form-control') }}
+                                {% for error in files_form.pricelist.errors %}
+                                <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-5">
+                            {{ files_form.submit(class='btn btn-flat bg-orange') }}
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -183,3 +183,22 @@ def set_contacts(contacts: tuple):
     settings['contacts'] = contacts
     settings.close()
 
+
+def get_files() -> tuple:
+    settings = shelve.open(filename)
+    if 'files' not in settings:
+        settings['files'] = { 'tos': '', 'pricelist': '' }
+    value = settings['files']
+    settings.close()
+    return value
+
+
+def set_files(tos, pricelist):
+    settings = shelve.open(filename, writeback=True)
+    if 'files' not in settings:
+        settings['files'] = {}
+    if tos is not None:
+        settings['files']['tos'] = tos
+    if pricelist is not None:
+        settings['files']['pricelist'] = pricelist
+    settings.close()

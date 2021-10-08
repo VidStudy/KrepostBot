@@ -1,3 +1,4 @@
+import io
 from application import telegram_bot as bot
 from application.core import userservice, dishservice
 from application.resources import strings, keyboards
@@ -257,6 +258,30 @@ def catalog(message: Message):
     category_keyboard = keyboards.from_dish_categories(categories, language)
     bot.send_message(chat_id, catalog_message, reply_markup=category_keyboard)
     bot.register_next_step_handler_by_chat_id(chat_id, catalog_processor)
+
+
+def check_pricelist(message: Message):
+    if not message.text:
+        return False
+    user_id = message.from_user.id
+    user = userservice.get_user_by_telegram_id(user_id)
+    if not user:
+        return False
+    language = user.language
+    return strings.get_string('pricelist', language) in message.text and 'private' in message.chat.type
+
+
+@bot.message_handler(content_types=['text'], func=lambda m: botutils.check_auth(m) and check_pricelist(m))
+def pricelist(message: Message):
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+    language = userservice.get_user_language(user_id)
+
+    with open(settings.get_files()['pricelist'], 'rb') as doc:
+        document = io.BytesIO(doc.read())
+        extension = settings.get_files()['pricelist'].split('.')[-1]
+        document.name = 'pricelist.' + extension
+        bot.send_document(chat_id, document, caption=strings.get_string('pricelist', language))
 
 
 from . import registration
